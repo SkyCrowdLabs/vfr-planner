@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { LatLng, LatLngExpression } from "leaflet";
 import React, { useState } from "react";
+import WaypointList from "./Waypoint";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => <p>A map is loading</p>,
@@ -10,6 +11,7 @@ const Map = dynamic(() => import("@/components/Map"), {
 });
 
 export interface Waypoint {
+  id: string;
   name: string;
   latlng: LatLngExpression;
 }
@@ -17,6 +19,7 @@ export interface Waypoint {
 interface RouteBuilderProps {}
 
 const RouteBuilder: React.FC<RouteBuilderProps> = () => {
+  const [waypointCount, setWaypointCount] = useState(0);
   const initPos: LatLngExpression = [14.599512, 120.984222];
 
   const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
@@ -29,19 +32,25 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
     }
 
     const data = await res.json();
-    setWaypoints([...waypoints, { name: data.data.name, latlng }]);
+    setWaypoints([
+      ...waypoints,
+      { name: data.data.name, latlng, id: `waypoint-${waypointCount}` },
+    ]);
+    setWaypointCount(waypointCount + 1);
   };
 
   return (
-    <div className="absolute w-full h-full">
-      <Map
-        position={initPos}
-        zoom={7}
-        onMapClick={addWaypoint}
-        waypoints={waypoints}
-      />
-      <div className="relative h-20 w-96 bottom-40 bg-white z-50 rounded-md left-[calc(50%-24rem)]">
-        {JSON.stringify(waypoints)}
+    <div className="w-full h-full flex flex-row">
+      <div className="grow">
+        <Map
+          position={initPos}
+          zoom={7}
+          onMapClick={addWaypoint}
+          waypoints={waypoints}
+        />
+      </div>
+      <div className="bg-white min-w-72">
+        <WaypointList waypoints={waypoints} />
       </div>
     </div>
   );

@@ -28,9 +28,8 @@ const MyMap: React.FC<MapProps> = ({
     return null;
   };
   const WaypointPlotter = () => {
-    return waypoints.map(({ latlng }) => {
-      const { lat, lng } = latlng as LatLng;
-      return <Marker key={`waypoint-${lat}-${lng}`} position={latlng} />;
+    return waypoints.map(({ id, latlng }) => {
+      return <Marker key={id} position={latlng} />;
     });
   };
 
