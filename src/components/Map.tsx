@@ -8,13 +8,13 @@ import {
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import { LatLng, LatLngExpression } from "leaflet";
+import { LatLng, LatLngTuple } from "leaflet";
 import { Waypoint } from "./RouteBuilder";
 
 interface MapProps {
-  position: LatLngExpression;
+  position: LatLngTuple;
   zoom: number;
-  onMapClick: (latlng: LatLngExpression) => void;
+  onMapClick: (latlng: LatLng) => void;
   waypoints: Waypoint[];
 }
 

@@ -14,7 +14,7 @@ const Map = dynamic(() => import("@/components/Map"), {
 export interface Waypoint {
   id: string;
   name: string;
-  latlng: LatLngExpression;
+  latlng: LatLng;
 }
 
 interface RouteBuilderProps {}
@@ -25,9 +25,9 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
 
   const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
-  const addWaypoint = async (latlng: LatLngExpression) => {
+  const addWaypoint = async (latlng: LatLng) => {
     setIsLoading(true);
-    const { lat, lng } = latlng as LatLng;
+    const { lat, lng } = latlng.wrap() as LatLng;
     const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
 
     if (!res.ok) {

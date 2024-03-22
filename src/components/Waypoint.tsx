@@ -11,13 +11,21 @@ interface WaypointListProps {
 const WaypointList: React.FC<WaypointListProps> = ({ waypoints }) => {
   return (
     <ul role="list" className="divide-y divide-gray-100">
-      {waypoints.map(({ id, name }) => (
+      {waypoints.map(({ id, name, latlng }, i) => (
         <li key={id} className="flex items-center justify-between gap-x-6 py-5">
           <div className="min-w-0">
             <div className="flex items-start gap-x-3">
               <p className="text-sm font-semibold leading-6 text-gray-900">
                 {name}
               </p>
+              {i > 0 && (
+                <p>
+                  {(waypoints[i - 1].latlng.distanceTo(latlng) / 1000).toFixed(
+                    3
+                  )}{" "}
+                  km
+                </p>
+              )}
             </div>
           </div>
           <div className="flex flex-none items-center gap-x-4">
