@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       <div>
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="lg:pl-72 flex flex-col h-screen justify-center">
+        <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
           <Navigation setSidebarOpen={setSidebarOpen} />
 
           <main className="flex grow z-0">
