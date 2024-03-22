@@ -156,6 +156,15 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)]">
         <WaypointList waypoints={waypoints} />
+        <p>
+          Total:{" "}
+          {waypoints
+            .reduce(
+              (acc, { distanceFromPrev }) => acc + (distanceFromPrev || 0),
+              0
+            )
+            .toFixed(2)}
+        </p>
       </div>
     </div>
   );
