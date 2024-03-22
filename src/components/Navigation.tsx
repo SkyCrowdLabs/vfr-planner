@@ -35,7 +35,9 @@ const Navigation: React.FC<NavigationProps> = ({ setSidebarOpen }) => {
       <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
       <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <div className="relative flex flex-1"></div>
+        <div className="relative flex flex-1">
+          Copyright © 2024 SkyCrowd Labs All Rights Reserved
+        </div>
         <div className="flex items-center gap-x-4 lg:gap-x-6">
           <button
             type="button"
