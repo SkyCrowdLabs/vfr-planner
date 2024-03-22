@@ -52,7 +52,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
       <div
         className={clsx(
           isLoading && "pointer-events-none opacity-50",
-          "grow md:h-[calc(100vh-4rem)] md:max-h-none max-h-[80%]"
+          "grow md:h-[calc(100vh-4rem)] md:max-h-none md:min-h-none max-h-[80%] min-h-[80%]"
         )}
       >
         <Map
