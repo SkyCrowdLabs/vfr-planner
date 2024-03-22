@@ -1,10 +1,31 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import { LatLngExpression } from "leaflet";
 
-export default function MyMap(props: any) {
-  const { position, zoom } = props;
+interface MapProps {
+  position: LatLngExpression;
+  zoom: number;
+  onMapClick: (latlng: LatLngExpression) => void;
+}
+
+const MyMap: React.FC<MapProps> = ({ position, zoom, onMapClick }) => {
+  const LocationFinder = () => {
+    useMapEvents({
+      click(e) {
+        const { latlng } = e;
+        onMapClick(latlng);
+      },
+    });
+    return null;
+  };
 
   return (
     <MapContainer
@@ -17,11 +38,9 @@ export default function MyMap(props: any) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {/* <Marker>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker> */}
+      <LocationFinder />
     </MapContainer>
   );
-}
+};
+
+export default MyMap;
