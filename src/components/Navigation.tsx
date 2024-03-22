@@ -35,9 +35,7 @@ const Navigation: React.FC<NavigationProps> = ({ setSidebarOpen }) => {
       <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
       <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <div className="relative flex flex-1">
-          Copyright © 2024 SkyCrowd Labs All Rights Reserved
-        </div>
+        <div className="relative flex flex-1"></div>
         <div className="flex items-center gap-x-4 lg:gap-x-6">
           <button
             type="button"
@@ -46,13 +44,11 @@ const Navigation: React.FC<NavigationProps> = ({ setSidebarOpen }) => {
             <span className="sr-only">View notifications</span>
             <BellIcon className="h-6 w-6" aria-hidden="true" />
           </button>
-
           {/* Separator */}
           <div
             className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
             aria-hidden="true"
           />
-
           {/* Profile dropdown */}
           <Menu as="div" className="relative">
             <Menu.Button className="-m-1.5 flex items-center p-1.5">
