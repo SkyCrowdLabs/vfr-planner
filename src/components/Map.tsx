@@ -10,12 +10,14 @@ import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import { LatLng, LatLngTuple } from "leaflet";
 import { Waypoint } from "./RouteBuilder";
+import WaypointMarker from "./WaypointMarker";
 
 interface MapProps {
   position: LatLngTuple;
   zoom: number;
   onMapClick: (latlng: LatLng) => void;
   waypoints: Waypoint[];
+  onDragEnd: (id: string, latlng: LatLng) => void;
 }
 
 const MyMap: React.FC<MapProps> = ({
@@ -23,6 +25,7 @@ const MyMap: React.FC<MapProps> = ({
   zoom,
   onMapClick,
   waypoints,
+  onDragEnd,
 }) => {
   const LocationFinder = () => {
     useMapEvents({
@@ -34,8 +37,14 @@ const MyMap: React.FC<MapProps> = ({
     return null;
   };
   const WaypointPlotter = () => {
-    return waypoints.map(({ id, latlng }) => {
-      return <Marker key={id} position={latlng} />;
+    return waypoints.map((waypoint) => {
+      return (
+        <WaypointMarker
+          key={waypoint.id}
+          waypoint={waypoint}
+          onDragEnd={onDragEnd}
+        />
+      );
     });
   };
 

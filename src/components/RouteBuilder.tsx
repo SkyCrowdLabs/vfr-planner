@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { LatLng, LatLngExpression } from "leaflet";
 import React, { useState } from "react";
-import WaypointList from "./Waypoint";
+import WaypointList from "./WaypointList";
 import clsx from "clsx";
 
 const Map = dynamic(() => import("@/components/Map"), {
@@ -25,6 +25,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
 
   const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
+
   const addWaypoint = async (latlng: LatLng) => {
     setIsLoading(true);
     const { lat, lng } = latlng.wrap() as LatLng;
@@ -47,6 +48,35 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
     setIsLoading(false);
   };
 
+  const editWaypoint = async (id: string, latlng: LatLng) => {
+    setIsLoading(true);
+    const { lat, lng } = latlng.wrap() as LatLng;
+
+    const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
+
+    if (!res.ok) {
+      console.error("There has been an error");
+    }
+
+    const data = await res.json();
+
+    const updatedWaypoints = waypoints.map((waypoint) => {
+      if (id === waypoint.id)
+        return {
+          id,
+          name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+          latlng,
+        };
+      return waypoint;
+    });
+    setWaypoints(updatedWaypoints);
+    setIsLoading(false);
+  };
+
+  const handleDragEnd = async (id: string, latlng: LatLng) => {
+    await editWaypoint(id, latlng);
+  };
+
   return (
     <div className="w-full h-full flex flex-col md:flex-row">
       <div
@@ -56,6 +86,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
         )}
       >
         <Map
+          onDragEnd={handleDragEnd}
           position={initPos}
           zoom={7}
           onMapClick={addWaypoint}
