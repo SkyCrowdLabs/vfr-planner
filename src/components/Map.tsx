@@ -1,4 +1,10 @@
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Polyline,
+  TileLayer,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -33,6 +39,8 @@ const MyMap: React.FC<MapProps> = ({
     });
   };
 
+  const linePositions = waypoints.map(({ latlng }) => latlng);
+
   return (
     <MapContainer
       center={position}
@@ -46,6 +54,7 @@ const MyMap: React.FC<MapProps> = ({
       />
       <LocationFinder />
       <WaypointPlotter />
+      <Polyline positions={linePositions} />
     </MapContainer>
   );
 };
