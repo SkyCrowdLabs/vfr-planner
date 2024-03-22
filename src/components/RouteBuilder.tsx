@@ -81,16 +81,55 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
     }
 
     const data = await res.json();
+    const waypointInfo = {
+      id,
+      name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+      latlng,
+    };
 
-    const updatedWaypoints = waypoints.map((waypoint) => {
-      if (id === waypoint.id)
-        return {
-          id,
-          name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-          latlng,
+    const waypointNum = waypoints.length;
+    const updatedWaypoints = waypoints.reduce((acc, waypoint, i) => {
+      if (id === waypoint.id) {
+        const distanceFromPrev =
+          i > 0 ? waypoints[i - 1].latlng.distanceTo(latlng) / 1000 : undefined;
+        const p1 =
+          i > 0
+            ? new LatLon(
+                waypoints[i - 1].latlng.lat,
+                waypoints[i - 1].latlng.lng
+              )
+            : undefined;
+        const p2 = new LatLon(latlng.lat, latlng.lng);
+        const bearingFromPrev = p1?.initialBearingTo(p2);
+
+        const newAcc = [...acc];
+        newAcc[i] = {
+          ...waypointInfo,
+          distanceFromPrev,
+          bearingFromPrev,
         };
-      return waypoint;
-    });
+
+        if (i + 1 < waypointNum) {
+          const nextWaypoint = waypoints[i + 1];
+          const nextDistanceFromPrev =
+            newAcc[i].latlng.distanceTo(nextWaypoint.latlng) / 1000;
+          const nP1 = new LatLon(newAcc[i].latlng.lat, newAcc[i].latlng.lng);
+          const nP2 = new LatLon(
+            nextWaypoint.latlng.lat,
+            nextWaypoint.latlng.lng
+          );
+          const nextBearingFromPrev = nP1?.initialBearingTo(nP2);
+          newAcc[i + 1] = {
+            ...nextWaypoint,
+            distanceFromPrev: nextDistanceFromPrev,
+            bearingFromPrev: nextBearingFromPrev,
+          };
+        }
+
+        return newAcc;
+      }
+      return acc;
+    }, waypoints as Waypoint[]);
     setWaypoints(updatedWaypoints);
     setIsLoading(false);
   };
