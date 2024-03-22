@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { LatLngExpression } from "leaflet";
+import { LatLng, LatLngExpression } from "leaflet";
 import React, { useState } from "react";
 
 const Map = dynamic(() => import("@/components/Map"), {
@@ -20,8 +20,17 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
 
   const [route, setRoute] = useState<Waypoints[]>([]);
-  const addWaypoint = (latlng: LatLngExpression) =>
-    setRoute([...route, { name: "test", latlng }]);
+  const addWaypoint = async (latlng: LatLngExpression) => {
+    const { lat, lng } = latlng as LatLng;
+    const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
+
+    if (!res.ok) {
+      console.error("There has been an error");
+    }
+
+    const data = await res.json();
+    setRoute([...route, { name: data.data.name, latlng }]);
+  };
 
   return (
     <div className="absolute w-full h-full">
