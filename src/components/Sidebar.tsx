@@ -2,22 +2,21 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  CalendarIcon,
-  ChartPieIcon,
+  ArchiveBoxIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
+  MapIcon,
+  MapPinIcon,
+  PaperAirplaneIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import clsx from "clsx";
 
 const navigation = [
-  { name: "Route", href: "#", icon: HomeIcon, current: true },
-  { name: "Flights", href: "#", icon: UsersIcon, current: false },
-  { name: "Aircraft", href: "#", icon: FolderIcon, current: false },
+  { name: "Map", href: "#", icon: MapIcon, current: true },
+  { name: "Routes", href: "#", icon: MapPinIcon, current: false },
+  { name: "Aircraft", href: "#", icon: PaperAirplaneIcon, current: false },
+  { name: "Flights", href: "#", icon: ArchiveBoxIcon, current: false },
 ];
 
 interface SidebarProps {
