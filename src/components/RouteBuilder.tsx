@@ -26,11 +26,18 @@ interface RouteBuilderProps {
 }
 
 const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
-  const [waypointCount, setWaypointCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const initPos: LatLngExpression = [14.599512, 120.984222];
+  const storedWaypoints = localStorage.getItem("waypoints");
+  const initWaypoints = storedWaypoints
+    ? JSON.parse(storedWaypoints).map((waypoint: Waypoint) => ({
+        ...waypoint,
+        latlng: new LatLng(waypoint.latlng.lat, waypoint.latlng.lng),
+      }))
+    : [];
 
-  const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
+  const [waypoints, setWaypoints] = useState<Waypoint[]>(initWaypoints);
+  const [waypointCount, setWaypointCount] = useState(waypoints.length);
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -76,7 +83,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
     const p2 = new LatLon(latlng.lat, latlng.lng);
     const bearingFromPrev = p1?.initialBearingTo(p2);
 
-    setWaypoints([
+    const newWaypoints = [
       ...waypoints,
       {
         name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
@@ -85,8 +92,10 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
         distanceFromPrev,
         bearingFromPrev,
       },
-    ]);
+    ];
+    setWaypoints(newWaypoints);
     setWaypointCount(waypointCount + 1);
+    localStorage.setItem("waypoints", JSON.stringify(newWaypoints));
     setIsLoading(false);
   };
 
@@ -151,6 +160,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
       return acc;
     }, waypoints as Waypoint[]);
     setWaypoints(updatedWaypoints);
+    localStorage.setItem("waypoints", JSON.stringify(updatedWaypoints));
     setIsLoading(false);
   };
 
