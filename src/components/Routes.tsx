@@ -4,7 +4,8 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { LOCAL_STORAGE_WAYPOINTS_KEY, Waypoint } from "./RouteBuilder";
+import { Waypoint } from "./RouteBuilder";
+import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 
 export interface Route {
   created_at: string;

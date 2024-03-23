@@ -7,8 +7,7 @@ import WaypointList from "./WaypointList";
 import clsx from "clsx";
 import LatLon from "geodesy/latlon-spherical.js";
 import { Button } from "./common/button";
-
-export const LOCAL_STORAGE_WAYPOINTS_KEY = "waypoints";
+import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => <p>A map is loading</p>,
