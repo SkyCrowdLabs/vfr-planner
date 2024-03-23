@@ -21,9 +21,11 @@ export interface Waypoint {
   bearingFromPrev?: number;
 }
 
-interface RouteBuilderProps {}
+interface RouteBuilderProps {
+  isLoggedIn?: boolean;
+}
 
-const RouteBuilder: React.FC<RouteBuilderProps> = () => {
+const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
   const [waypointCount, setWaypointCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const initPos: LatLngExpression = [14.599512, 120.984222];
@@ -183,7 +185,10 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
             )
             .toFixed(2)}
         </p>
-        <Button disabled={!waypoints.length} onClick={handleSave}>
+        <Button
+          disabled={!waypoints.length || !isLoggedIn}
+          onClick={handleSave}
+        >
           Save
         </Button>
       </div>

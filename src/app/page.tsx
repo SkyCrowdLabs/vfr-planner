@@ -56,7 +56,7 @@ const Home: NextPage = () => {
           />
 
           <main className="flex grow z-0">
-            <RouteBuilder />
+            <RouteBuilder isLoggedIn={!!userProfile} />
           </main>
         </div>
       </div>
