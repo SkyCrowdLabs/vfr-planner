@@ -8,6 +8,8 @@ import clsx from "clsx";
 import LatLon from "geodesy/latlon-spherical.js";
 import { Button } from "./common/button";
 
+const LOCAL_STORAGE_WAYPOINTS_KEY = "waypoints";
+
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => <p>A map is loading</p>,
   ssr: false,
@@ -28,7 +30,7 @@ interface RouteBuilderProps {
 const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
   const [isLoading, setIsLoading] = useState(false);
   const initPos: LatLngExpression = [14.599512, 120.984222];
-  const storedWaypoints = localStorage.getItem("waypoints");
+  const storedWaypoints = localStorage.getItem(LOCAL_STORAGE_WAYPOINTS_KEY);
   const initWaypoints = storedWaypoints
     ? JSON.parse(storedWaypoints).map((waypoint: Waypoint) => ({
         ...waypoint,
@@ -95,7 +97,10 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
     ];
     setWaypoints(newWaypoints);
     setWaypointCount(waypointCount + 1);
-    localStorage.setItem("waypoints", JSON.stringify(newWaypoints));
+    localStorage.setItem(
+      LOCAL_STORAGE_WAYPOINTS_KEY,
+      JSON.stringify(newWaypoints)
+    );
     setIsLoading(false);
   };
 
@@ -160,8 +165,17 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
       return acc;
     }, waypoints as Waypoint[]);
     setWaypoints(updatedWaypoints);
-    localStorage.setItem("waypoints", JSON.stringify(updatedWaypoints));
+    localStorage.setItem(
+      LOCAL_STORAGE_WAYPOINTS_KEY,
+      JSON.stringify(updatedWaypoints)
+    );
     setIsLoading(false);
+  };
+
+  const resetWaypoints = () => {
+    setWaypointCount(0);
+    setWaypoints([]);
+    localStorage.removeItem(LOCAL_STORAGE_WAYPOINTS_KEY);
   };
 
   const handleDragEnd = async (id: string, latlng: LatLng) => {
@@ -200,6 +214,9 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
           onClick={handleSave}
         >
           Save
+        </Button>
+        <Button disabled={!waypoints.length} onClick={resetWaypoints}>
+          Reset
         </Button>
       </div>
     </div>
