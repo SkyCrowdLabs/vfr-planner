@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Waypoint } from "./RouteBuilder";
+import { LOCAL_STORAGE_WAYPOINTS_KEY, Waypoint } from "./RouteBuilder";
 
 export interface Route {
   created_at: string;
@@ -14,11 +14,26 @@ export interface Route {
   waypoints: Waypoint[];
 }
 
-const Routes = () => {
+interface RouteProps {}
+
+const Routes: React.FC<RouteProps> = () => {
   const supabase = createClient();
   const [user, setUser] = useState<User | undefined>(undefined);
   const router = useRouter();
   const [routes, setRoutes] = useState<Route[]>([]);
+
+  const onClickRoute = async (id: number) => {
+    const res = await fetch(`/routes?id=${id}`);
+    if (!res.ok) {
+      return;
+    }
+    const data = await res.json();
+    localStorage.setItem(
+      LOCAL_STORAGE_WAYPOINTS_KEY,
+      JSON.stringify(data.data.waypoints)
+    );
+    return;
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -115,7 +130,11 @@ const Routes = () => {
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {routes.length > 0 &&
                       routes.map((route) => (
-                        <tr key={route.id}>
+                        <tr
+                          key={route.id}
+                          className="hover:bg-gray-200 hover:cursor-pointer"
+                          onClick={() => onClickRoute(route.id)}
+                        >
                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             {route.name || "Unnamed route"}
                           </td>
