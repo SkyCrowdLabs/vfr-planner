@@ -48,18 +48,21 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
+          name: string | null;
           user_id: string | null;
           waypoints: Json | null;
         };
         Insert: {
           created_at?: string;
           id?: number;
+          name?: string | null;
           user_id?: string | null;
           waypoints?: Json | null;
         };
         Update: {
           created_at?: string;
           id?: number;
+          name?: string | null;
           user_id?: string | null;
           waypoints?: Json | null;
         };

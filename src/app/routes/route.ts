@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const body: { waypoints?: Waypoint[] } = await request.json();
+  const body: { waypoints?: Waypoint[]; name: string } = await request.json();
   if (!body.waypoints) {
     return NextResponse.json({
       message: "There is something wrong in the request",
@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { error, data } = await supabase.from("routes").insert({
+    name: body.name,
     waypoints: JSON.parse(JSON.stringify(body.waypoints)),
     user_id: user.data?.user?.id,
   });
