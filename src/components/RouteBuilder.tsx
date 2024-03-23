@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import WaypointList from "./WaypointList";
 import clsx from "clsx";
 import LatLon from "geodesy/latlon-spherical.js";
+import { Button } from "./common/button";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => <p>A map is loading</p>,
@@ -28,6 +29,23 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
 
   const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
+
+  const handleSave = async () => {
+    setIsLoading(true);
+
+    const res = await fetch("/routes", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ waypoints }),
+    });
+
+    if (!res.ok) {
+      console.error(res);
+    }
+    setIsLoading(false);
+  };
 
   const addWaypoint = async (latlng: LatLng) => {
     setIsLoading(true);
@@ -165,6 +183,9 @@ const RouteBuilder: React.FC<RouteBuilderProps> = () => {
             )
             .toFixed(2)}
         </p>
+        <Button disabled={!waypoints.length} onClick={handleSave}>
+          Save
+        </Button>
       </div>
     </div>
   );
