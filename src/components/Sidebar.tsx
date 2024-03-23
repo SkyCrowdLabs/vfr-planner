@@ -182,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                   Settings
                 </a>
               </li>
-              <h6 className="text-gray-400">
+              <h6 className="text-gray-400 text-xs">
                 <a href="https://www.skycrowd.dev">
                   Copyright © 2024 SkyCrowd Labs All Rights Reserved
                 </a>
