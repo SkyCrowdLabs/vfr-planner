@@ -7,6 +7,9 @@ import { NextPage } from "next";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse, User } from "@supabase/supabase-js";
 import dynamic from "next/dynamic";
+import Routes from "@/components/Routes";
+import Aircraft from "@/components/Aircraft";
+import Flights from "@/components/Flights";
 
 const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
   loading: () => <p>A map is loading</p>,
@@ -31,6 +34,7 @@ const Home: NextPage = () => {
   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const supabase = createClient();
+  const [activeTab, setActiveTab] = useState("Map");
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -52,7 +56,12 @@ const Home: NextPage = () => {
   return (
     <>
       <div>
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
 
         <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
           <Navigation
@@ -61,7 +70,10 @@ const Home: NextPage = () => {
           />
 
           <main className="flex grow z-0">
-            <RouteBuilder isLoggedIn={!!userProfile} />
+            {activeTab === "Map" && <RouteBuilder isLoggedIn={!!userProfile} />}
+            {activeTab === "Routes" && <Routes />}
+            {activeTab === "Aircraft" && <Aircraft />}
+            {activeTab === "Flights" && <Flights />}
           </main>
         </div>
       </div>

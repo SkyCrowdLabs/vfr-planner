@@ -12,19 +12,41 @@ import {
 import React, { Fragment } from "react";
 import clsx from "clsx";
 
-const navigation = [
-  { name: "Map", href: "#", icon: MapIcon, current: true },
-  { name: "Routes", href: "#", icon: MapPinIcon, current: false },
-  { name: "Aircraft", href: "#", icon: PaperAirplaneIcon, current: false },
-  { name: "Flights", href: "#", icon: ArchiveBoxIcon, current: false },
-];
-
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (s: boolean) => void;
+  activeTab: string;
+  setActiveTab: (s: string) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  sidebarOpen,
+  setSidebarOpen,
+  activeTab,
+  setActiveTab,
+}) => {
+  const navigation = [
+    { name: "Map", href: "#", icon: MapIcon, current: activeTab === "Map" },
+    {
+      name: "Routes",
+      href: "#",
+      icon: MapPinIcon,
+      current: activeTab === "Routes",
+    },
+    {
+      name: "Aircraft",
+      href: "#",
+      icon: PaperAirplaneIcon,
+      current: activeTab === "Aircraft",
+    },
+    {
+      name: "Flights",
+      href: "#",
+      icon: ArchiveBoxIcon,
+      current: activeTab === "Flights",
+    },
+  ];
+
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -152,7 +174,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                   {navigation.map((item) => (
                     <li key={item.name}>
                       <a
-                        href={item.href}
+                        onClick={() => setActiveTab(item.name)}
                         className={clsx(
                           item.current
                             ? "bg-gray-800 text-white"
