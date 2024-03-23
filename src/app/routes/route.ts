@@ -21,9 +21,10 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { error, data } = await supabase
-    .from("routes")
-    .insert({ waypoints: body.waypoints, user_id: user.data?.user?.id });
+  const { error, data } = await supabase.from("routes").insert({
+    waypoints: JSON.parse(JSON.stringify(body.waypoints)),
+    user_id: user.data?.user?.id,
+  });
   if (error) {
     console.error(error);
     NextResponse.json({ message: "There has been an error", code: 400 });
