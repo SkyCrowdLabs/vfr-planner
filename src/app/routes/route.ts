@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
   const { error, data } = await supabase
     .from("routes")
     .select("*")
-    .eq("user_id", user.data.user?.id as string);
+    .eq("user_id", user.data.user?.id as string)
+    .order("created_at", { ascending: false });
   if (error) {
     console.error(error);
     NextResponse.json({ message: "There has been an error", code: 400 });
