@@ -32,3 +32,26 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({ message: "Success!", data });
 }
+
+export async function GET(request: NextRequest) {
+  const supabase = createClient();
+
+  const user = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({
+      message: "You are not authorized to do this",
+      code: 201,
+    });
+  }
+
+  const { error, data } = await supabase
+    .from("routes")
+    .select("*")
+    .eq("user_id", user.data.user?.id as string);
+  if (error) {
+    console.error(error);
+    NextResponse.json({ message: "There has been an error", code: 400 });
+  }
+
+  return NextResponse.json({ message: "Success!", data });
+}

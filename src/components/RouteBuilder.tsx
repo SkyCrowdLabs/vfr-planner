@@ -49,7 +49,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ waypoints }),
+      body: JSON.stringify({ name: "Saved route", waypoints }),
     });
 
     if (!res.ok) {
