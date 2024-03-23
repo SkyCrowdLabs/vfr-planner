@@ -4,9 +4,14 @@ import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Navigation from "@/components/Navigation";
 import { NextPage } from "next";
-import RouteBuilder from "@/components/RouteBuilder";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse, User } from "@supabase/supabase-js";
+import dynamic from "next/dynamic";
+
+const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
+  loading: () => <p>A map is loading</p>,
+  ssr: false,
+});
 
 export interface UserProfile {
   user: User;
