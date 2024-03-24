@@ -8,21 +8,13 @@ import clsx from "clsx";
 import LatLon from "geodesy/latlon-spherical.js";
 import { Button } from "./common/button";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
-import { Oval } from "react-loader-spinner";
+import Spinner from "./Spinner";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => (
     <div className="h-full w-full z-0">
       <div className="flex h-full w-full items-center justify-center">
-        <Oval
-          visible={true}
-          height="80"
-          width="80"
-          color="#4fa94d"
-          ariaLabel="oval-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
+        <Spinner />
       </div>
     </div>
   ),
