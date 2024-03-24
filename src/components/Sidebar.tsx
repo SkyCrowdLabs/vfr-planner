@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           {navigation.map((item) => (
                             <li key={item.name}>
                               <a
-                                href={item.href}
+                                onClick={() => setActiveTab(item.name)}
                                 className={clsx(
                                   item.current
                                     ? "bg-gray-800 text-white"
