@@ -8,7 +8,6 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment } from "react";
-import { Button } from "./common/button";
 
 const userNavigation = [{ name: "Your profile", href: "#" }];
 
@@ -102,7 +101,7 @@ const Navigation: React.FC<NavigationProps> = ({
                   <Menu.Item>
                     <a
                       className={
-                        "hover:bg-gray-50 block px-3 py-1 text-sm leading-6 text-gray-900"
+                        "hover:bg-gray-50 block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
                       }
                       onClick={async () => await signout()}
                     >
