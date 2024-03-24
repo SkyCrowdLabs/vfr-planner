@@ -5,11 +5,11 @@ import Sidebar from "@/components/Sidebar";
 import Navigation from "@/components/Navigation";
 import { NextPage } from "next";
 import { createClient } from "@/utils/supabase/client";
-import { PostgrestSingleResponse, User } from "@supabase/supabase-js";
 import dynamic from "next/dynamic";
 import Routes from "@/components/Routes";
 import Aircraft from "@/components/Aircraft";
 import Flights from "@/components/Flights";
+import { AuthContext, UserProfile } from "@/context/AuthContext";
 import Spinner from "@/components/Spinner";
 
 const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
@@ -22,18 +22,6 @@ const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
   ),
   ssr: false,
 });
-
-export interface UserProfile {
-  user: User;
-  profile: PostgrestSingleResponse<{
-    created_at: string;
-    first_name: string | null;
-    id: string;
-    last_name: string | null;
-    middle_name: string | null;
-    user_id: string | null;
-  }>;
-}
 
 const Home: NextPage = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | undefined>(
@@ -61,7 +49,7 @@ const Home: NextPage = () => {
   }, [supabase]);
 
   return (
-    <>
+    <AuthContext.Provider value={userProfile}>
       <div>
         <Sidebar
           sidebarOpen={sidebarOpen}
@@ -84,7 +72,7 @@ const Home: NextPage = () => {
           </main>
         </div>
       </div>
-    </>
+    </AuthContext.Provider>
   );
 };
 
