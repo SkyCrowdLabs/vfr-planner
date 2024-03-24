@@ -10,9 +10,24 @@ import dynamic from "next/dynamic";
 import Routes from "@/components/Routes";
 import Aircraft from "@/components/Aircraft";
 import Flights from "@/components/Flights";
+import { Oval } from "react-loader-spinner";
 
 const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
-  loading: () => <p>A map is loading</p>,
+  loading: () => (
+    <div className="h-full w-full z-0">
+      <div className="flex h-full w-full items-center justify-center">
+        <Oval
+          visible={true}
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    </div>
+  ),
   ssr: false,
 });
 
