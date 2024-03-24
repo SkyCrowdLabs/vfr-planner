@@ -3,8 +3,10 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Waypoint } from "./RouteBuilder";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
+import { Waypoint } from "./RouteBuilder";
 
 export interface Route {
   created_at: string;
@@ -17,54 +19,27 @@ export interface Route {
 interface RouteProps {}
 
 const Routes: React.FC<RouteProps> = () => {
-  const supabase = createClient();
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const router = useRouter();
-  const [routes, setRoutes] = useState<Route[]>([]);
+  const [selectedRouteId, setSelectedRouteId] = useState<number | undefined>(
+    undefined
+  );
+  const { data: routes } = useSWR<Route[]>("/routes", fetcher);
+  const { data: selectedRoute } = useSWR<Route>(
+    selectedRouteId ? `/routes?id=${selectedRouteId}` : null,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (selectedRoute) {
+      localStorage.setItem(
+        LOCAL_STORAGE_WAYPOINTS_KEY,
+        JSON.stringify(selectedRoute?.waypoints)
+      );
+    }
+  }, [selectedRoute]);
 
   const onClickRoute = async (id: number) => {
-    const res = await fetch(`/routes?id=${id}`);
-    if (!res.ok) {
-      return;
-    }
-    const data = await res.json();
-    localStorage.setItem(
-      LOCAL_STORAGE_WAYPOINTS_KEY,
-      JSON.stringify(data.data.waypoints)
-    );
-    return;
+    setSelectedRouteId(id);
   };
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data) {
-        router.push("/login");
-        return;
-      }
-      setUser(data.user);
-      return;
-    };
-
-    getUser();
-  }, [supabase, router]);
-
-  useEffect(() => {
-    const getRoutes = async () => {
-      if (user) {
-        const res = await fetch("routes");
-        if (!res.ok) {
-          return;
-        }
-
-        const data = await res.json();
-        setRoutes(data.data);
-        return;
-      }
-    };
-
-    getRoutes();
-  }, [supabase, user]);
 
   return (
     <div>
@@ -128,8 +103,8 @@ const Routes: React.FC<RouteProps> = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {routes.length > 0 &&
-                      routes.map((route) => (
+                    {routes?.length &&
+                      routes?.map((route) => (
                         <tr
                           key={route.id}
                           className="hover:bg-gray-200 hover:cursor-pointer"
