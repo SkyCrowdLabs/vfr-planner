@@ -1,6 +1,22 @@
+"use client";
+import Button from "@/components/Button";
 import { login } from "./actions";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginInput>();
+  const onSubmit: SubmitHandler<LoginInput> = (data) => login(data);
+  console.log(isSubmitting);
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -16,7 +32,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
                 htmlFor="email"
@@ -26,6 +42,7 @@ export default function Login() {
               </label>
               <div className="mt-2">
                 <input
+                  {...register("email")}
                   id="email"
                   name="email"
                   type="email"
@@ -55,6 +72,7 @@ export default function Login() {
               </div>
               <div className="mt-2">
                 <input
+                  {...register("password")}
                   id="password"
                   name="password"
                   type="password"
@@ -66,12 +84,9 @@ export default function Login() {
             </div>
 
             <div>
-              <button
-                formAction={login}
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in
-              </button>
+              <Button isLoading={isSubmitting}>
+                <input type="submit" />
+              </Button>
             </div>
           </form>
 
