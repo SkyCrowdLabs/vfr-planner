@@ -1,5 +1,5 @@
 import { signout } from "@/app/login/actions";
-import { UserProfile } from "@/app/home/page";
+import { UserProfile } from "@/context/AuthContext";
 import { Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
