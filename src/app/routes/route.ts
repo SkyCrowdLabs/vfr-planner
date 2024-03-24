@@ -45,15 +45,18 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const { error, data } = await supabase
+  // const offset = request.nextUrl.searchParams.get("offset");
+  const limit = parseInt(request.nextUrl.searchParams.get("limit") || "10");
+
+  const { error, data, count } = await supabase
     .from("routes")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("user_id", user.data.user?.id as string)
+    .limit(limit)
     .order("created_at", { ascending: false });
   if (error) {
     console.error(error);
     NextResponse.json({ message: "There has been an error", code: 400 });
   }
-
-  return NextResponse.json({ message: "Success!", data });
+  return NextResponse.json({ message: "Success!", data, count });
 }
