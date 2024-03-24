@@ -45,23 +45,6 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const id = request.nextUrl.searchParams.get("id");
-
-  if (id) {
-    const { error, data } = await supabase
-      .from("routes")
-      .select("*")
-      .eq("user_id", user.data.user?.id as string)
-      .eq("id", id)
-      .single();
-    if (error) {
-      console.error(error);
-      NextResponse.json({ message: "There has been an error", code: 400 });
-    }
-
-    return NextResponse.json({ message: "Success!", data });
-  }
-
   const { error, data } = await supabase
     .from("routes")
     .select("*")

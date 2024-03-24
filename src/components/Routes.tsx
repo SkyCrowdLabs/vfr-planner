@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { Waypoint } from "./RouteBuilder";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export interface Route {
   created_at: string;
@@ -22,7 +23,7 @@ const Routes: React.FC<RouteProps> = () => {
   );
   const { data: routes } = useSWR<Route[]>("/routes", fetcher);
   const { data: selectedRoute } = useSWR<Route>(
-    selectedRouteId ? `/routes?id=${selectedRouteId}` : null,
+    selectedRouteId ? `/routes/${selectedRouteId}` : null,
     fetcher
   );
 
@@ -64,6 +65,17 @@ const Routes: React.FC<RouteProps> = () => {
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              {/* <InfiniteScroll
+                dataLength={routes?.length || 0} //This is important field to render the next data
+                next={console.log}
+                hasMore={true}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                  <p style={{ textAlign: "center" }}>
+                    <b>Yay! You have seen it all</b>
+                  </p>
+                }
+              > */}
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50">
@@ -134,6 +146,7 @@ const Routes: React.FC<RouteProps> = () => {
                   </tbody>
                 </table>
               </div>
+              {/* </InfiniteScroll> */}
             </div>
           </div>
         </div>
