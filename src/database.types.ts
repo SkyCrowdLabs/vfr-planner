@@ -9,6 +9,104 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      "airport-frequencies": {
+        Row: {
+          airport_ident: string | null;
+          airport_ref: number | null;
+          description: string | null;
+          frequency_mhz: number | null;
+          id: number;
+          type: string | null;
+        };
+        Insert: {
+          airport_ident?: string | null;
+          airport_ref?: number | null;
+          description?: string | null;
+          frequency_mhz?: number | null;
+          id: number;
+          type?: string | null;
+        };
+        Update: {
+          airport_ident?: string | null;
+          airport_ref?: number | null;
+          description?: string | null;
+          frequency_mhz?: number | null;
+          id?: number;
+          type?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_airport-frequencies_airport_ref_fkey";
+            columns: ["airport_ref"];
+            isOneToOne: false;
+            referencedRelation: "airports";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      airports: {
+        Row: {
+          continent: string | null;
+          elevation_ft: string | null;
+          gps_code: string | null;
+          home_link: string | null;
+          iata_code: string | null;
+          id: number;
+          ident: string | null;
+          iso_country: string | null;
+          iso_region: string | null;
+          keywords: string | null;
+          latitude_deg: number | null;
+          local_code: string | null;
+          longitude_deg: number | null;
+          municipality: string | null;
+          name: string | null;
+          scheduled_service: string | null;
+          type: string | null;
+          wikipedia_link: string | null;
+        };
+        Insert: {
+          continent?: string | null;
+          elevation_ft?: string | null;
+          gps_code?: string | null;
+          home_link?: string | null;
+          iata_code?: string | null;
+          id: number;
+          ident?: string | null;
+          iso_country?: string | null;
+          iso_region?: string | null;
+          keywords?: string | null;
+          latitude_deg?: number | null;
+          local_code?: string | null;
+          longitude_deg?: number | null;
+          municipality?: string | null;
+          name?: string | null;
+          scheduled_service?: string | null;
+          type?: string | null;
+          wikipedia_link?: string | null;
+        };
+        Update: {
+          continent?: string | null;
+          elevation_ft?: string | null;
+          gps_code?: string | null;
+          home_link?: string | null;
+          iata_code?: string | null;
+          id?: number;
+          ident?: string | null;
+          iso_country?: string | null;
+          iso_region?: string | null;
+          keywords?: string | null;
+          latitude_deg?: number | null;
+          local_code?: string | null;
+          longitude_deg?: number | null;
+          municipality?: string | null;
+          name?: string | null;
+          scheduled_service?: string | null;
+          type?: string | null;
+          wikipedia_link?: string | null;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           created_at: string;
@@ -72,6 +170,83 @@ export type Database = {
             columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "users";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      runways: {
+        Row: {
+          airport_ident: string | null;
+          airport_ref: number | null;
+          closed: string | null;
+          he_displaced_threshold_ft: string | null;
+          he_elevation_ft: string | null;
+          he_heading_degT: string | null;
+          he_ident: string | null;
+          he_latitude_deg: string | null;
+          he_longitude_deg: string | null;
+          id: number | null;
+          le_displaced_threshold_ft: string | null;
+          le_elevation_ft: string | null;
+          le_heading_degT: string | null;
+          le_ident: string | null;
+          le_latitude_deg: string | null;
+          le_longitude_deg: string | null;
+          length_ft: string | null;
+          lighted: string | null;
+          surface: string | null;
+          width_ft: string | null;
+        };
+        Insert: {
+          airport_ident?: string | null;
+          airport_ref?: number | null;
+          closed?: string | null;
+          he_displaced_threshold_ft?: string | null;
+          he_elevation_ft?: string | null;
+          he_heading_degT?: string | null;
+          he_ident?: string | null;
+          he_latitude_deg?: string | null;
+          he_longitude_deg?: string | null;
+          id?: number | null;
+          le_displaced_threshold_ft?: string | null;
+          le_elevation_ft?: string | null;
+          le_heading_degT?: string | null;
+          le_ident?: string | null;
+          le_latitude_deg?: string | null;
+          le_longitude_deg?: string | null;
+          length_ft?: string | null;
+          lighted?: string | null;
+          surface?: string | null;
+          width_ft?: string | null;
+        };
+        Update: {
+          airport_ident?: string | null;
+          airport_ref?: number | null;
+          closed?: string | null;
+          he_displaced_threshold_ft?: string | null;
+          he_elevation_ft?: string | null;
+          he_heading_degT?: string | null;
+          he_ident?: string | null;
+          he_latitude_deg?: string | null;
+          he_longitude_deg?: string | null;
+          id?: number | null;
+          le_displaced_threshold_ft?: string | null;
+          le_elevation_ft?: string | null;
+          le_heading_degT?: string | null;
+          le_ident?: string | null;
+          le_latitude_deg?: string | null;
+          le_longitude_deg?: string | null;
+          length_ft?: string | null;
+          lighted?: string | null;
+          surface?: string | null;
+          width_ft?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_runways_airport_ref_fkey";
+            columns: ["airport_ref"];
+            isOneToOne: false;
+            referencedRelation: "airports";
             referencedColumns: ["id"];
           }
         ];
