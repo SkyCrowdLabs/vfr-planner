@@ -7,6 +7,8 @@ import { fetcher } from "@/utils/fetcher";
 import { Waypoint } from "./RouteBuilder";
 import Pagination from "./Pagination";
 import { format } from "date-fns";
+import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export interface Route {
   created_at: string;
@@ -26,10 +28,12 @@ const Routes: React.FC<RouteProps> = () => {
     undefined
   );
   const [count, setCount] = useState(0);
-  const { data: routesResponse } = useSWR<{ data: Route[]; count: number }>(
-    `/routes?offset=${offset}&limit=${limit}`,
-    fetcher
-  );
+
+  const { data: routesResponse, error } = useSWR<{
+    data: Route[];
+    count: number;
+  }>(`/routes?offset=${offset}&limit=${limit}`, fetcher);
+  console.log(error);
   const { data: selectedRoute } = useSWR<{ data: Route }>(
     selectedRouteId ? `/routes/${selectedRouteId}` : null,
     fetcher
@@ -128,7 +132,7 @@ const Routes: React.FC<RouteProps> = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {routesResponse?.data.length &&
+                    {routesResponse?.data?.length &&
                       routesResponse?.data?.map((route) => (
                         <tr key={route.id}>
                           <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
@@ -171,7 +175,7 @@ const Routes: React.FC<RouteProps> = () => {
                 </table>
                 <Pagination
                   indexStart={offset + 1}
-                  indexEnd={offset + (routesResponse?.data.length || 0)}
+                  indexEnd={offset + (routesResponse?.data?.length || 0)}
                   count={count}
                   onClickNext={handleNext}
                   onClickPrev={handlePrev}

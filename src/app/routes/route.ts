@@ -7,18 +7,22 @@ export async function POST(request: NextRequest) {
 
   const user = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({
-      message: "You are not authorized to do this",
-      code: 201,
-    });
+    return NextResponse.json(
+      {
+        message: "You are not authorized to do this",
+      },
+      { status: 401 }
+    );
   }
 
   const body: { waypoints?: Waypoint[]; name: string } = await request.json();
   if (!body.waypoints) {
-    return NextResponse.json({
-      message: "There is something wrong in the request",
-      code: 400,
-    });
+    return NextResponse.json(
+      {
+        message: "There is something wrong in the request",
+      },
+      { status: 400 }
+    );
   }
 
   const { error, data } = await supabase.from("routes").insert({
@@ -28,7 +32,10 @@ export async function POST(request: NextRequest) {
   });
   if (error) {
     console.error(error);
-    NextResponse.json({ message: "There has been an error", code: 400 });
+    return NextResponse.json(
+      { message: "There has been an error" },
+      { status: 400 }
+    );
   }
 
   return NextResponse.json({ message: "Success!", data });
@@ -39,10 +46,12 @@ export async function GET(request: NextRequest) {
 
   const user = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({
-      message: "You are not authorized to do this",
-      code: 201,
-    });
+    return NextResponse.json(
+      {
+        message: "You are not authorized to do this",
+      },
+      { status: 401 }
+    );
   }
 
   const offset = parseInt(request.nextUrl.searchParams.get("offset") || "0");
@@ -56,7 +65,10 @@ export async function GET(request: NextRequest) {
     .order("created_at", { ascending: false });
   if (error) {
     console.error(error);
-    NextResponse.json({ message: "There has been an error", code: 400 });
+    return NextResponse.json(
+      { message: "There has been an error" },
+      { status: 400 }
+    );
   }
   return NextResponse.json({ message: "Success!", data, count });
 }
