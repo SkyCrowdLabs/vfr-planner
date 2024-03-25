@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { Waypoint } from "./RouteBuilder";
 import Pagination from "./Pagination";
+import { format } from "date-fns";
 
 export interface Route {
   created_at: string;
@@ -152,8 +153,8 @@ const Routes: React.FC<RouteProps> = () => {
                           <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                             {route.waypoints[route.waypoints.length - 1].name}
                           </td>
-                          <td className="px-3 py-4 text-sm text-gray-500">
-                            {route.created_at}
+                          <td className="px-3 py-4 text-sm text-gray-500 min-w-48 sm:min-w-0">
+                            {format(route.created_at, "HH:mm dd-MMM-yyyy")}
                           </td>
                           <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <a
