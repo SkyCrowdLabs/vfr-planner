@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import WaypointList from "./WaypointList";
 import clsx from "clsx";
 import LatLon from "geodesy/latlon-spherical.js";
-import { Button } from "./common/button";
+import Button from "./Button";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import Spinner from "./Spinner";
 

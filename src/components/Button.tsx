@@ -1,12 +1,11 @@
 import clsx from "clsx";
 import React from "react";
-import Spinner from "./Spinner";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ isLoading, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ isLoading, children, ...props }) => {
   return (
     <button
       {...props}
@@ -34,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({ isLoading, ...props }) => {
           ></path>
         </svg>
       )}
-      Sign in
+      {children}
     </button>
   );
 };

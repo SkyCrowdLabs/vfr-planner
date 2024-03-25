@@ -45,14 +45,14 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // const offset = request.nextUrl.searchParams.get("offset");
+  const offset = parseInt(request.nextUrl.searchParams.get("offset") || "0");
   const limit = parseInt(request.nextUrl.searchParams.get("limit") || "10");
 
   const { error, data, count } = await supabase
     .from("routes")
     .select("*", { count: "exact" })
     .eq("user_id", user.data.user?.id as string)
-    .limit(limit)
+    .range(offset, offset + limit - 1)
     .order("created_at", { ascending: false });
   if (error) {
     console.error(error);

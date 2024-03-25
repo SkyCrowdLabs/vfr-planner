@@ -5,7 +5,7 @@ import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { Waypoint } from "./RouteBuilder";
-import InfiniteScroll from "react-infinite-scroll-component";
+import Pagination from "./Pagination";
 
 export interface Route {
   created_at: string;
@@ -18,23 +18,21 @@ export interface Route {
 interface RouteProps {}
 
 const Routes: React.FC<RouteProps> = () => {
-  const [loadedNum, setLoadedNum] = useState(15);
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
+  const [selectedPage, setSelectedPage] = useState(1);
   const [selectedRouteId, setSelectedRouteId] = useState<number | undefined>(
     undefined
   );
-  const [totalNum, setTotalNum] = useState(0);
+  const [count, setCount] = useState(0);
   const { data: routesResponse } = useSWR<{ data: Route[]; count: number }>(
-    `/routes?offset=0&limit=${loadedNum}`,
+    `/routes?offset=${offset}&limit=${limit}`,
     fetcher
   );
   const { data: selectedRoute } = useSWR<{ data: Route }>(
     selectedRouteId ? `/routes/${selectedRouteId}` : null,
     fetcher
   );
-
-  const loadNext = () => {
-    setLoadedNum(loadedNum + 5);
-  };
 
   useEffect(() => {
     if (selectedRoute) {
@@ -44,13 +42,28 @@ const Routes: React.FC<RouteProps> = () => {
       );
     }
   }, [selectedRoute]);
-  useEffect(() => {
-    setTotalNum(routesResponse?.count || 0);
-  }, [routesResponse?.count]);
 
   const onClickRoute = async (id: number) => {
     setSelectedRouteId(id);
   };
+
+  const handleNext = () => {
+    const nextPage = selectedPage + 1;
+    if ((nextPage - 1) * 10 < count) setSelectedPage(nextPage);
+  };
+  const handlePrev = () => {
+    const prevPage = selectedPage - 1;
+    if (prevPage > 0) setSelectedPage(prevPage);
+  };
+  const handleClickPage = (n: number) => {
+    setSelectedPage(n);
+  };
+  useEffect(() => {
+    setOffset((selectedPage - 1) * 10);
+  }, [selectedPage]);
+  useEffect(() => {
+    setCount(routesResponse?.count || 0);
+  }, [routesResponse]);
 
   return (
     <div>
@@ -76,90 +89,95 @@ const Routes: React.FC<RouteProps> = () => {
         </div>
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8 overflow-scroll">
-              <InfiniteScroll
-                height={600}
-                dataLength={loadedNum}
-                next={console.log}
-                hasMore={loadedNum < totalNum}
-                loader={<h4>Loading...</h4>}
-                endMessage={
-                  <p style={{ textAlign: "center" }}>
-                    <b>Yay! You have seen it all</b>
-                  </p>
-                }
-              >
-                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-300">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                        >
-                          Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Departure
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Destination
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Created at
-                        </th>
-                        <th
-                          scope="col"
-                          className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                        >
-                          <span className="sr-only">Edit</span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                      {routesResponse?.data.length &&
-                        routesResponse?.data?.map((route) => (
-                          <tr
-                            key={route.id}
-                            className="hover:bg-gray-200 hover:cursor-pointer"
-                            onClick={() => onClickRoute(route.id)}
-                          >
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                              {route.name || "Unnamed route"}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {route.waypoints[0].name}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {route.waypoints[route.waypoints.length - 1].name}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              {route.created_at}
-                            </td>
-                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                              >
-                                Edit
-                                <span className="sr-only">, {route.name}</span>
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </InfiniteScroll>
+            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              <div className="-mx-4 mt-8 sm:-mx-0">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      >
+                        Name
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                      >
+                        Departure
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                      >
+                        Destination
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Created at
+                      </th>
+                      <th
+                        scope="col"
+                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                      >
+                        <span className="sr-only">Edit</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {routesResponse?.data.length &&
+                      routesResponse?.data?.map((route) => (
+                        <tr key={route.id}>
+                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                            {route.name || "Unnamed route"}
+                            <dl className="font-normal lg:hidden">
+                              <dt className="sr-only">Departure</dt>
+                              <dd className="mt-1 truncate text-gray-700">
+                                {route.waypoints[0].name}
+                              </dd>
+                              <dt className="sr-only sm:hidden">Destination</dt>
+                              <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                {
+                                  route.waypoints[route.waypoints.length - 1]
+                                    .name
+                                }
+                              </dd>
+                            </dl>
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                            {route.waypoints[0].name}
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                            {route.waypoints[route.waypoints.length - 1].name}
+                          </td>
+                          <td className="px-3 py-4 text-sm text-gray-500">
+                            {route.created_at}
+                          </td>
+                          <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <a
+                              href="#"
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              Edit
+                              <span className="sr-only">, {route.name}</span>
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                <Pagination
+                  indexStart={offset + 1}
+                  indexEnd={offset + (routesResponse?.data.length || 0)}
+                  count={count}
+                  onClickNext={handleNext}
+                  onClickPrev={handlePrev}
+                  onClickPage={handleClickPage}
+                  selectedPage={selectedPage}
+                />
+              </div>
             </div>
           </div>
         </div>
