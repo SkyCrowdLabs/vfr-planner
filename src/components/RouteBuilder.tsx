@@ -232,7 +232,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
         />
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)]">
-        <div>
+        {/* <div>
           <label
             htmlFor="departure"
             className="block text-sm font-medium leading-6 text-gray-900"
@@ -273,7 +273,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
                 </option>
               ))}
           </select>
-        </div>
+        </div> */}
         <WaypointList waypoints={waypoints} />
         <p>
           Total:{" "}

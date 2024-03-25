@@ -13,6 +13,7 @@ import { AuthContext, UserProfile } from "@/context/AuthContext";
 import Spinner from "@/components/Spinner";
 import { SWRConfig } from "swr";
 import { useRouter } from "next/navigation";
+import Home from "@/components/Home";
 
 const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
   loading: () => (
@@ -25,14 +26,14 @@ const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
   ssr: false,
 });
 
-const Home: NextPage = () => {
+const Dashboard: NextPage = () => {
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfile | undefined>(
     undefined
   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const supabase = createClient();
-  const [activeTab, setActiveTab] = useState("Map");
+  const [activeTab, setActiveTab] = useState("Home");
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -77,6 +78,7 @@ const Home: NextPage = () => {
             />
 
             <main className="flex grow z-0">
+              {activeTab === "Home" && <Home />}
               {activeTab === "Map" && (
                 <RouteBuilder isLoggedIn={!!userProfile} />
               )}
@@ -91,4 +93,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

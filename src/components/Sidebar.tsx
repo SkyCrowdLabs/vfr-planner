@@ -4,6 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import {
   ArchiveBoxIcon,
   Cog6ToothIcon,
+  HomeIcon,
   MapIcon,
   MapPinIcon,
   PaperAirplaneIcon,
@@ -26,6 +27,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   setActiveTab,
 }) => {
   const navigation = [
+    {
+      name: "Home",
+      href: "#",
+      icon: HomeIcon,
+      current: activeTab === "Home",
+    },
     { name: "Map", href: "#", icon: MapIcon, current: activeTab === "Map" },
     {
       name: "Routes",
