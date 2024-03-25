@@ -9,6 +9,29 @@ import LatLon from "geodesy/latlon-spherical.js";
 import Button from "./Button";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import Spinner from "./Spinner";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
+
+export interface Airport {
+  continent: string | null;
+  elevation_ft: string | null;
+  gps_code: string | null;
+  home_link: string | null;
+  iata_code: string | null;
+  id: number;
+  ident: string | null;
+  iso_country: string | null;
+  iso_region: string | null;
+  keywords: string | null;
+  latitude_deg: number | null;
+  local_code: string | null;
+  longitude_deg: number | null;
+  municipality: string | null;
+  name: string | null;
+  scheduled_service: string | null;
+  type: string | null;
+  wikipedia_link: string | null;
+}
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => (
@@ -46,6 +69,10 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
 
   const [waypoints, setWaypoints] = useState<Waypoint[]>(initWaypoints);
   const [waypointCount, setWaypointCount] = useState(waypoints.length);
+  const { data: airports, error } = useSWR<{ data: Airport[] }>(
+    "/airports",
+    fetcher
+  );
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -218,9 +245,33 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
             className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
             defaultValue="Canada"
           >
-            <option>United States</option>
-            <option>Canada</option>
-            <option>Mexico</option>
+            {airports?.data.length &&
+              airports.data.map((airport) => (
+                <option key={airport.id}>
+                  {airport.ident} {airport.name}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="arrival"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
+            Arrival
+          </label>
+          <select
+            id="arrival"
+            name="arrival"
+            className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            defaultValue="Canada"
+          >
+            {airports?.data.length &&
+              airports.data.map((airport) => (
+                <option key={airport.id}>
+                  {airport.ident} {airport.name}
+                </option>
+              ))}
           </select>
         </div>
         <WaypointList waypoints={waypoints} />
