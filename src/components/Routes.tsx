@@ -134,7 +134,13 @@ const Routes: React.FC<RouteProps> = () => {
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {routesResponse?.data?.length &&
                       routesResponse?.data?.map((route) => (
-                        <tr key={route.id}>
+                        <tr
+                          className="cursor-pointer hover:bg-gray-200"
+                          onClick={() => {
+                            onClickRoute(route.id);
+                          }}
+                          key={route.id}
+                        >
                           <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
                             {route.name || "Unnamed route"}
                             <dl className="font-normal lg:hidden">
