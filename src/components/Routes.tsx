@@ -7,7 +7,6 @@ import { fetcher } from "@/utils/fetcher";
 import { Waypoint } from "./RouteBuilder";
 import Pagination from "./Pagination";
 import { format } from "date-fns";
-import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export interface Route {
@@ -21,6 +20,7 @@ export interface Route {
 interface RouteProps {}
 
 const Routes: React.FC<RouteProps> = () => {
+  const router = useRouter();
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
   const [selectedPage, setSelectedPage] = useState(1);
@@ -33,7 +33,7 @@ const Routes: React.FC<RouteProps> = () => {
     data: Route[];
     count: number;
   }>(`/routes?offset=${offset}&limit=${limit}`, fetcher);
-  console.log(error);
+
   const { data: selectedRoute } = useSWR<{ data: Route }>(
     selectedRouteId ? `/routes/${selectedRouteId}` : null,
     fetcher

@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
-  const user = await supabase.auth.getUser();
-  if (!user) {
+  const userRes = await supabase.auth.getUser();
+  if (!userRes.data || userRes.error) {
     return NextResponse.json(
       {
         message: "You are not authorized to do this",
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   const { error, data } = await supabase.from("routes").insert({
     name: body.name,
     waypoints: JSON.parse(JSON.stringify(body.waypoints)),
-    user_id: user.data?.user?.id,
+    user_id: userRes.data?.user?.id,
   });
   if (error) {
     console.error(error);
@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const supabase = createClient();
 
-  const user = await supabase.auth.getUser();
-  if (!user) {
+  const userRes = await supabase.auth.getUser();
+  if (!userRes.data || userRes.error) {
     return NextResponse.json(
       {
         message: "You are not authorized to do this",
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
   const { error, data, count } = await supabase
     .from("routes")
     .select("*", { count: "exact" })
-    .eq("user_id", user.data.user?.id as string)
+    .eq("user_id", userRes.data.user?.id as string)
     .range(offset, offset + limit - 1)
     .order("created_at", { ascending: false });
   if (error) {

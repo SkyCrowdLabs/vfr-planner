@@ -11,6 +11,8 @@ import Aircraft from "@/components/Aircraft";
 import Flights from "@/components/Flights";
 import { AuthContext, UserProfile } from "@/context/AuthContext";
 import Spinner from "@/components/Spinner";
+import { SWRConfig } from "swr";
+import { useRouter } from "next/navigation";
 
 const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
   loading: () => (
@@ -24,6 +26,7 @@ const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
 });
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfile | undefined>(
     undefined
   );
@@ -50,28 +53,40 @@ const Home: NextPage = () => {
 
   return (
     <AuthContext.Provider value={userProfile}>
-      <div>
-        <Sidebar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-
-        <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
-          <Navigation
+      <SWRConfig
+        value={{
+          onError: (error) => {
+            if (error.status === 401) {
+              router.push("/login");
+            }
+          },
+        }}
+      >
+        <div>
+          <Sidebar
+            sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
-            userProfile={userProfile}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />
 
-          <main className="flex grow z-0">
-            {activeTab === "Map" && <RouteBuilder isLoggedIn={!!userProfile} />}
-            {activeTab === "Routes" && <Routes />}
-            {activeTab === "Aircraft" && <Aircraft />}
-            {activeTab === "Flights" && <Flights />}
-          </main>
+          <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
+            <Navigation
+              setSidebarOpen={setSidebarOpen}
+              userProfile={userProfile}
+            />
+
+            <main className="flex grow z-0">
+              {activeTab === "Map" && (
+                <RouteBuilder isLoggedIn={!!userProfile} />
+              )}
+              {activeTab === "Routes" && <Routes />}
+              {activeTab === "Aircraft" && <Aircraft />}
+              {activeTab === "Flights" && <Flights />}
+            </main>
+          </div>
         </div>
-      </div>
+      </SWRConfig>
     </AuthContext.Provider>
   );
 };

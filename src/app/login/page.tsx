@@ -15,7 +15,6 @@ export default function Login() {
     formState: { isSubmitting },
   } = useForm<LoginInput>();
   const onSubmit: SubmitHandler<LoginInput> = (data) => login(data);
-  console.log(isSubmitting);
 
   return (
     <>
