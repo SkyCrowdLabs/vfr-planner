@@ -24,7 +24,7 @@ const WaypointList: React.FC<WaypointListProps> = () => {
                 </p>
                 {i > 0 && (
                   <p>
-                    {distanceFromPrev?.toFixed(2)} km,{" "}
+                    {distanceFromPrev?.toFixed(2)} nm,{" "}
                     {bearingFromPrev?.toFixed(0)} deg
                   </p>
                 )}
