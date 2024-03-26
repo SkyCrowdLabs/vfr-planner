@@ -1,40 +1,68 @@
 "use client";
-import React, { useMemo, useRef, useState } from "react";
-import { LatLng } from "leaflet";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Marker } from "react-leaflet";
-import { Waypoint } from "@/types";
+import { GeocodingResponse, Waypoint } from "@/types";
+import { useRouteStore } from "@/store/store";
+import useSWR from "swr";
+import { LatLng } from "leaflet";
+import { fetcher } from "@/utils/fetcher";
+import { getDistanceNm } from "@/utils/getDistanceNm";
+import { getTrueCourseDeg } from "@/utils/getTrueCourse";
 
 interface WaypointMarkerProps {
   waypoint: Waypoint;
-  onDragEnd: (id: string, latlng: LatLng) => void;
 }
 
-const WaypointMarker: React.FC<WaypointMarkerProps> = ({
-  waypoint: { latlng, id },
-  onDragEnd,
-}) => {
-  const [position, setPosition] = useState(latlng);
+const WaypointMarker: React.FC<WaypointMarkerProps> = ({ waypoint }) => {
+  const waypoints = useRouteStore((state) => state.waypoints);
+  const editWaypoint = useRouteStore((state) => state.editWaypoint);
   const markerRef = useRef(null);
+  const [latlng, setLatlng] = useState<LatLng | undefined>(undefined);
+  const { data } = useSWR<GeocodingResponse>(
+    latlng ? `/geocoding?lat=${latlng.lat}&lng=${latlng.lng}` : null,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (latlng) {
+      const waypointId = waypoints.findIndex((w) => w.id === waypoint.id);
+      const prevWaypoint = waypoints[waypointId - 1];
+      const nextWaypoint = waypoints[waypointId + 1];
+      editWaypoint(waypoint.id, {
+        ...waypoint,
+        latlng,
+        name: data?.data.name,
+        distanceFromPrev: getDistanceNm(prevWaypoint, waypoint),
+        bearingFromPrev: getTrueCourseDeg(prevWaypoint, waypoint),
+      });
+      editWaypoint(nextWaypoint.id, {
+        ...nextWaypoint,
+        distanceFromPrev: getDistanceNm(waypoint, nextWaypoint),
+        bearingFromPrev: getTrueCourseDeg(waypoint, nextWaypoint),
+      });
+    }
+  }, [data]);
 
   const eventHandlers = useMemo(
     () => ({
       dragend() {
         const marker: any = markerRef.current;
         if (marker != null) {
-          const newLatlng = marker.getLatLng();
-          setPosition(newLatlng);
-          onDragEnd(id, newLatlng);
+          setLatlng(marker.getLatLng());
         }
       },
     }),
-    [onDragEnd, id]
+    []
   );
 
   return (
     <Marker
-      draggable
+      draggable={
+        !waypoint.id.includes("departure") &&
+        !waypoint.id.includes("destination")
+      }
       eventHandlers={eventHandlers}
-      position={position}
+      position={waypoint.latlng}
       ref={markerRef}
     />
   );

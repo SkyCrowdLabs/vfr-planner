@@ -36,17 +36,8 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
     setIsLoading(false);
   };
 
-  const editWaypoint = async (id: string, latlng: LatLng) => {
-    setIsLoading(true);
-    setIsLoading(false);
-  };
-
   const resetWaypoints = () => {
     resetRoute();
-  };
-
-  const handleDragEnd = async (id: string, latlng: LatLng) => {
-    await editWaypoint(id, latlng);
   };
 
   return (
@@ -58,7 +49,6 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
         )}
       >
         <Map
-          onDragEnd={handleDragEnd}
           position={initPos}
           zoom={7}
           waypoints={waypoints}

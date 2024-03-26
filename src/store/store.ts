@@ -1,4 +1,6 @@
 import { Airport, Waypoint } from "@/types";
+import { getDistanceNm } from "@/utils/getDistanceNm";
+import { getTrueCourseDeg } from "@/utils/getTrueCourse";
 import { LatLng } from "leaflet";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -41,30 +43,44 @@ export const useRouteStore = create<RouteState>()(
     (set, get) => ({
       ...initialRouteState,
       initializeRoute: (departure, destination) =>
-        set((state) => ({
-          ...state,
-          departure,
-          destination,
-          waypoints: [
-            {
-              id: `departure-${departure.ident}`,
-              name: departure.ident || "",
-              latlng: new LatLng(
-                departure.latitude_deg as number,
-                departure.longitude_deg as number
-              ),
-            },
-            {
-              id: `destination-${destination.ident}`,
-              name: destination.ident || "",
-              latlng: new LatLng(
-                destination.latitude_deg as number,
-                destination.longitude_deg as number
-              ),
-            },
-          ],
-          isModified: true,
-        })),
+        set((state) => {
+          const departureWaypoint = {
+            id: `departure-${departure.ident}`,
+            name: departure.ident || "",
+            latlng: new LatLng(
+              departure.latitude_deg as number,
+              departure.longitude_deg as number
+            ),
+          };
+          const destinationWaypoint = {
+            id: `destination-${destination.ident}`,
+            name: destination.ident || "",
+            latlng: new LatLng(
+              destination.latitude_deg as number,
+              destination.longitude_deg as number
+            ),
+          };
+          return {
+            ...state,
+            departure,
+            destination,
+            waypoints: [
+              departureWaypoint,
+              {
+                ...destinationWaypoint,
+                distanceFromPrev: getDistanceNm(
+                  departureWaypoint,
+                  destinationWaypoint
+                ),
+                bearingFromPrev: getTrueCourseDeg(
+                  departureWaypoint,
+                  destinationWaypoint
+                ),
+              },
+            ],
+            isModified: true,
+          };
+        }),
       addWaypoint: (waypoint, i) => {
         set((state) => {
           const newWaypoints = [...state.waypoints];
