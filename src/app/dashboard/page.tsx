@@ -77,7 +77,7 @@ const Dashboard: NextPage = () => {
               userProfile={userProfile}
             />
 
-            <main className="flex grow z-0">
+            <main className="flex grow z-0 bg-white">
               {activeTab === "Home" && <Home />}
               {activeTab === "Map" && (
                 <RouteBuilder isLoggedIn={!!userProfile} />
