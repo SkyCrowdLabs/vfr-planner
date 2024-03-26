@@ -33,7 +33,7 @@ const Dashboard: NextPage = () => {
   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const supabase = createClient();
-  const [activeTab, setActiveTab] = useState("Home");
+  const [activeTab, setActiveTab] = useState("Map");
 
   useEffect(() => {
     const getUserInfo = async () => {

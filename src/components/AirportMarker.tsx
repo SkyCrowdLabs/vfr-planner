@@ -12,8 +12,6 @@ const AirportMarker: React.FC<AirportMarkerProps> = ({
   airport,
   onClick = () => {},
 }) => {
-  const markerRef = useRef(null);
-
   const eventHandlers = useMemo(
     () => ({
       click() {

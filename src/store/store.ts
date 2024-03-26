@@ -13,7 +13,7 @@ interface RouteState {
   isLoading: boolean;
   error?: string;
   initializeRoute: (departure: Airport, destination: Airport) => void;
-  addWaypoint: (waypoint: Waypoint) => void;
+  addWaypoint: (waypoint: Waypoint, i: number) => void;
   editWaypoint: (id: string, waypoint: Partial<Waypoint>) => void;
   removeWaypoint: (id: string) => void;
   saveRoute: () => void;
@@ -65,12 +65,16 @@ export const useRouteStore = create<RouteState>()(
           ],
           isModified: true,
         })),
-      addWaypoint: (waypoint) => {
-        set((state) => ({
-          ...state,
-          waypoints: [...state.waypoints, waypoint],
-          isModified: true,
-        }));
+      addWaypoint: (waypoint, i) => {
+        set((state) => {
+          const newWaypoints = [...state.waypoints];
+          newWaypoints.splice(i, 0, waypoint);
+          return {
+            ...state,
+            waypoints: newWaypoints,
+            isModified: true,
+          };
+        });
       },
       editWaypoint: (id, waypoint) => {
         set((state) => {

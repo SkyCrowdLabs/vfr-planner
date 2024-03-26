@@ -28,3 +28,15 @@ export interface Waypoint {
   distanceFromPrev?: number;
   bearingFromPrev?: number;
 }
+
+export interface GeocodingResponse {
+  message: string;
+  data: {
+    elevation: string;
+    city: string;
+    name: string;
+    prov: string;
+    region: string;
+    state: string;
+  };
+}
