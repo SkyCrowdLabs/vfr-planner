@@ -57,25 +57,7 @@ const MyMap: React.FC<MapProps> = ({
     });
   };
 
-  const linePositions = [
-    ...(departure
-      ? [
-          {
-            lat: departure?.latitude_deg as number,
-            lng: departure?.longitude_deg as number,
-          },
-        ]
-      : []),
-    ...waypoints.map(({ latlng }) => latlng),
-    ...(destination
-      ? [
-          {
-            lat: destination?.latitude_deg as number,
-            lng: destination?.longitude_deg as number,
-          },
-        ]
-      : []),
-  ];
+  const linePositions = waypoints.map(({ latlng }) => latlng);
 
   return (
     <MapContainer

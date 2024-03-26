@@ -1,4 +1,5 @@
 import { Airport, Waypoint } from "@/types";
+import { LatLng } from "leaflet";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -21,25 +22,47 @@ interface RouteState {
     RouteState,
     "id" | "name" | "departure" | "destination" | "waypoints"
   >;
+  resetRoute: () => void;
 }
+
+const initialRouteState = {
+  id: undefined,
+  name: undefined,
+  departure: undefined,
+  destination: undefined,
+  waypoints: [],
+  isLoading: false,
+  isModified: false,
+  error: undefined,
+};
 
 export const useRouteStore = create<RouteState>()(
   persist(
     (set, get) => ({
-      id: undefined,
-      name: undefined,
-      departure: undefined,
-      destination: undefined,
-      waypoints: [],
-      isLoading: false,
-      isModified: false,
-      error: undefined,
-
+      ...initialRouteState,
       initializeRoute: (departure, destination) =>
         set((state) => ({
           ...state,
           departure,
           destination,
+          waypoints: [
+            {
+              id: `departure-${departure.ident}`,
+              name: departure.ident || "",
+              latlng: new LatLng(
+                departure.latitude_deg as number,
+                departure.longitude_deg as number
+              ),
+            },
+            {
+              id: `destination-${destination.ident}`,
+              name: destination.ident || "",
+              latlng: new LatLng(
+                destination.latitude_deg as number,
+                destination.longitude_deg as number
+              ),
+            },
+          ],
           isModified: true,
         })),
       addWaypoint: (waypoint) => {
@@ -126,6 +149,7 @@ export const useRouteStore = create<RouteState>()(
           waypoints: routeState.waypoints,
         };
       },
+      resetRoute: () => set((state) => ({ ...state, ...initialRouteState })),
     }),
     {
       name: "route-storage",
