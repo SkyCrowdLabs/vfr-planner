@@ -11,6 +11,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import { LatLng, LatLngTuple } from "leaflet";
 import WaypointMarker from "./WaypointMarker";
 import { Airport, Waypoint } from "@/types";
+import AirportMarker from "./AirportMarker";
 
 interface MapProps {
   position: LatLngTuple;
@@ -20,6 +21,8 @@ interface MapProps {
   onDragEnd: (id: string, latlng: LatLng) => void;
   departure?: Airport;
   destination?: Airport;
+  onClickDeparture?: () => void;
+  onClickDestination?: () => void;
 }
 
 const MyMap: React.FC<MapProps> = ({
@@ -30,6 +33,8 @@ const MyMap: React.FC<MapProps> = ({
   onDragEnd,
   departure,
   destination,
+  onClickDeparture,
+  onClickDestination,
 }) => {
   const LocationFinder = () => {
     useMapEvents({
@@ -39,30 +44,6 @@ const MyMap: React.FC<MapProps> = ({
       },
     });
     return null;
-  };
-  const DepartureMarker = () => {
-    return departure ? (
-      <Marker
-        position={
-          new LatLng(
-            departure.latitude_deg as number,
-            departure.longitude_deg as number
-          )
-        }
-      />
-    ) : undefined;
-  };
-  const DestinationMarker = () => {
-    return destination ? (
-      <Marker
-        position={
-          new LatLng(
-            destination.latitude_deg as number,
-            destination.longitude_deg as number
-          )
-        }
-      />
-    ) : undefined;
   };
   const WaypointPlotter = () => {
     return waypoints.map((waypoint) => {
@@ -76,7 +57,25 @@ const MyMap: React.FC<MapProps> = ({
     });
   };
 
-  const linePositions = waypoints.map(({ latlng }) => latlng);
+  const linePositions = [
+    ...(departure
+      ? [
+          {
+            lat: departure?.latitude_deg as number,
+            lng: departure?.longitude_deg as number,
+          },
+        ]
+      : []),
+    ...waypoints.map(({ latlng }) => latlng),
+    ...(destination
+      ? [
+          {
+            lat: destination?.latitude_deg as number,
+            lng: destination?.longitude_deg as number,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <MapContainer
@@ -89,8 +88,12 @@ const MyMap: React.FC<MapProps> = ({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <DepartureMarker />
-      <DestinationMarker />
+      {departure && (
+        <AirportMarker airport={departure} onClick={onClickDeparture} />
+      )}
+      {destination && (
+        <AirportMarker airport={destination} onClick={onClickDestination} />
+      )}
       <LocationFinder />
       <WaypointPlotter />
       <Polyline positions={linePositions} />

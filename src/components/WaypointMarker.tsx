@@ -1,8 +1,8 @@
 "use client";
 import React, { useMemo, useRef, useState } from "react";
-import { Waypoint } from "./RouteBuilder";
 import { LatLng } from "leaflet";
 import { Marker } from "react-leaflet";
+import { Waypoint } from "@/types";
 
 interface WaypointMarkerProps {
   waypoint: Waypoint;

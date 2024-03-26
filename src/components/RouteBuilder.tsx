@@ -5,12 +5,17 @@ import { LatLng, LatLngExpression } from "leaflet";
 import React, { useState } from "react";
 import WaypointList from "./WaypointList";
 import clsx from "clsx";
-import LatLon from "geodesy/latlon-spherical.js";
 import Button from "./Button";
-import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import Spinner from "./Spinner";
-import { Waypoint } from "@/types";
 import { useRouteStore } from "@/store/store";
+import {
+  getDistanceFromAirportToWaypoint,
+  getDistanceNm,
+} from "@/utils/getDistanceNm";
+import {
+  getTrueCourseDegFromAirportToWaypoint,
+  getTrueCourseDegFromWaypointToWaypoint,
+} from "@/utils/getTrueCourse";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => (
@@ -28,14 +33,24 @@ interface RouteBuilderProps {
 }
 
 const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const initPos: LatLngExpression = [14.599512, 120.984222];
   const getRoute = useRouteStore((state) => state.getRoute);
-  const route = getRoute();
+  const addWaypoint = useRouteStore((state) => state.addWaypoint);
 
-  const [waypoints, setWaypoints] = useState<Waypoint[]>(route.waypoints);
-  const [waypointCount, setWaypointCount] = useState(waypoints.length);
-  console.log(route);
+  const route = getRoute();
+  const departure = route.departure;
+  const destination = route.destination;
+  const waypoints = route.waypoints;
+
+  const isFirstWaypoint = waypoints.length === 0;
+  const handleClickDeparture = () => {
+    setIsEditing(true);
+  };
+  const handleClickDestination = () => {
+    setIsEditing(false);
+  };
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -54,49 +69,36 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
     setIsLoading(false);
   };
 
-  const addWaypoint = async (latlng: LatLng) => {
+  const handleMapClick = async (latlng: LatLng) => {
+    if (!isEditing || !departure || !destination) return;
+
     setIsLoading(true);
-    // const { lat, lng } = latlng.wrap() as LatLng;
-    // const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
+    const { lat, lng } = latlng.wrap() as LatLng;
 
-    // if (!res.ok) {
-    //   console.error("There has been an error");
-    // }
+    const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
+    if (!res.ok) {
+      console.error("There has been an error");
+    }
+    const waypointNum = waypoints.length;
+    const data = await res.json();
 
-    // const waypointNum = waypoints.length;
-    // const data = await res.json();
+    const distanceFromPrev = isFirstWaypoint
+      ? getDistanceFromAirportToWaypoint(departure, latlng)
+      : getDistanceNm(waypoints[waypointNum - 1].latlng, latlng);
+    const bearingFromPrev = isFirstWaypoint
+      ? getTrueCourseDegFromAirportToWaypoint(departure, latlng)
+      : getTrueCourseDegFromWaypointToWaypoint(
+          waypoints[waypointNum - 1].latlng,
+          latlng
+        );
 
-    // const distanceFromPrev =
-    //   waypointNum > 0
-    //     ? waypoints[waypointNum - 1].latlng.distanceTo(latlng) / 1000
-    //     : undefined;
-
-    // const p1 =
-    //   waypointNum > 0
-    //     ? new LatLon(
-    //         waypoints[waypointNum - 1].latlng.lat,
-    //         waypoints[waypointNum - 1].latlng.lng
-    //       )
-    //     : undefined;
-    // const p2 = new LatLon(latlng.lat, latlng.lng);
-    // const bearingFromPrev = p1?.initialBearingTo(p2);
-
-    // const newWaypoints = [
-    //   ...waypoints,
-    //   {
-    //     name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-    //     latlng,
-    //     id: `waypoint-${waypointCount}`,
-    //     distanceFromPrev,
-    //     bearingFromPrev,
-    //   },
-    // ];
-    // setWaypoints(newWaypoints);
-    // setWaypointCount(waypointCount + 1);
-    // localStorage.setItem(
-    //   LOCAL_STORAGE_WAYPOINTS_KEY,
-    //   JSON.stringify(newWaypoints)
-    // );
+    addWaypoint({
+      name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+      latlng,
+      id: `waypoint-${waypointNum + 1}`,
+      distanceFromPrev,
+      bearingFromPrev,
+    });
     setIsLoading(false);
   };
 
@@ -190,16 +192,19 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
           onDragEnd={handleDragEnd}
           position={initPos}
           zoom={7}
-          onMapClick={addWaypoint}
+          onMapClick={handleMapClick}
           waypoints={waypoints}
           departure={route.departure}
           destination={route.destination}
+          onClickDeparture={handleClickDeparture}
+          onClickDestination={handleClickDestination}
         />
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)]">
         {route.departure?.ident} {route.destination?.ident}
         <WaypointList waypoints={waypoints} />
         <p>
+          {JSON.stringify(isEditing)}
           Total:{" "}
           {waypoints
             .reduce(
