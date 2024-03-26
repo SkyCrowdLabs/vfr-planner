@@ -48,7 +48,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
         <WaypointList />
         <div className="w-full flex items-center justify-center">
-          <div className="w-20 mt-5">
+          <div className="w-20 mt-5 pb-5">
             <Button disabled={!waypoints.length} onClick={resetWaypoints}>
               Reset
             </Button>
