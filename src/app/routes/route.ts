@@ -1,4 +1,4 @@
-import { Waypoint } from "@/components/RouteBuilder";
+import { Waypoint } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 

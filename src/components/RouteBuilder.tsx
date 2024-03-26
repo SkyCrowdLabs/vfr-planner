@@ -9,6 +9,7 @@ import LatLon from "geodesy/latlon-spherical.js";
 import Button from "./Button";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import Spinner from "./Spinner";
+import { Waypoint } from "@/types";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => (
@@ -20,14 +21,6 @@ const Map = dynamic(() => import("@/components/Map"), {
   ),
   ssr: false,
 });
-
-export interface Waypoint {
-  id: string;
-  name: string;
-  latlng: LatLng;
-  distanceFromPrev?: number;
-  bearingFromPrev?: number;
-}
 
 interface RouteBuilderProps {
   isLoggedIn?: boolean;

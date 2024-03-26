@@ -4,31 +4,8 @@ import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import clsx from "clsx";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
-import { LatLng } from "leaflet";
-import LatLon from "geodesy/latlon-spherical.js";
-import { Waypoint } from "./RouteBuilder";
-import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
-
-export interface Airport {
-  continent: string | null;
-  elevation_ft: string | null;
-  gps_code: string | null;
-  home_link: string | null;
-  iata_code: string | null;
-  id: number;
-  ident: string | null;
-  iso_country: string | null;
-  iso_region: string | null;
-  keywords: string | null;
-  latitude_deg: number | null;
-  local_code: string | null;
-  longitude_deg: number | null;
-  municipality: string | null;
-  name: string | null;
-  scheduled_service: string | null;
-  type: string | null;
-  wikipedia_link: string | null;
-}
+import { Airport } from "@/types";
+import { useRouteStore } from "@/store/store";
 
 interface NewRouteProps {
   open: boolean;
@@ -36,13 +13,11 @@ interface NewRouteProps {
 }
 
 const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
+  const initializeRoute = useRouteStore((state) => state.initializeRoute);
   const cancelButtonRef = useRef(null);
   const [departureSearch, setDepartureSearch] = useState("");
   const [arrivalSearch, setArrivalSearch] = useState("");
-  const { data: airports, error } = useSWR<{ data: Airport[] }>(
-    `/airports`,
-    fetcher
-  );
+  const { data: airports } = useSWR<{ data: Airport[] }>(`/airports`, fetcher);
   const [departure, setDeparture] = useState<Airport | undefined>(undefined);
   const [arrival, setArrival] = useState<Airport | undefined>(undefined);
 
@@ -58,38 +33,11 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
         ident?.toLowerCase().includes(arrivalSearch.toLowerCase()) ||
         name?.toLowerCase().includes(arrivalSearch.toLowerCase())
     ) || airports?.data;
-  const initializeRoute = () => {
-    if (departure && arrival) {
-      const departureCoords = new LatLng(
-        departure.latitude_deg as number,
-        departure.longitude_deg as number
-      );
-      const arrivalCoords = new LatLng(
-        arrival.latitude_deg as number,
-        arrival.longitude_deg as number
-      );
-      const p1 = new LatLon(departureCoords.lat, departureCoords.lng);
-      const p2 = new LatLon(arrivalCoords.lat, arrivalCoords.lng);
-      const bearingFromPrev = p1?.initialBearingTo(p2);
-      localStorage.setItem(
-        LOCAL_STORAGE_WAYPOINTS_KEY,
-        JSON.stringify([
-          {
-            name: departure?.ident,
-            latlng: departureCoords,
-            id: `waypoint-${departure.ident}`,
-          },
-          {
-            name: arrival?.ident,
-            latlng: arrivalCoords,
-            id: `waypoint-${departure.ident}`,
-            distanceFromPrev: departureCoords.distanceTo(arrivalCoords) / 1000,
-            bearingFromPrev,
-          },
-        ])
-      );
-      setOpen(false);
-    }
+
+  const initialize = () => {
+    if (!departure || !arrival) return;
+    initializeRoute(departure, arrival);
+    setOpen(false);
   };
 
   return (
@@ -286,7 +234,7 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-                    onClick={initializeRoute}
+                    onClick={initialize}
                   >
                     Build route
                   </button>
