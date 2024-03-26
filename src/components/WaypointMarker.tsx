@@ -6,8 +6,6 @@ import { useRouteStore } from "@/store/store";
 import useSWR from "swr";
 import { LatLng } from "leaflet";
 import { fetcher } from "@/utils/fetcher";
-import { getDistanceNm } from "@/utils/getDistanceNm";
-import { getTrueCourseDeg } from "@/utils/getTrueCourse";
 
 interface WaypointMarkerProps {
   waypoint: Waypoint;
@@ -24,23 +22,15 @@ const WaypointMarker: React.FC<WaypointMarkerProps> = ({ waypoint }) => {
   );
 
   useEffect(() => {
-    if (latlng) {
-      const waypointId = waypoints.findIndex((w) => w.id === waypoint.id);
-      const prevWaypoint = waypoints[waypointId - 1];
-      const nextWaypoint = waypoints[waypointId + 1];
+    if (latlng && data) {
+      console.log(data);
       editWaypoint(waypoint.id, {
         ...waypoint,
         latlng,
-        name: data?.data.name,
-        distanceFromPrev: getDistanceNm(prevWaypoint, waypoint),
-        bearingFromPrev: getTrueCourseDeg(prevWaypoint, waypoint),
-      });
-      editWaypoint(nextWaypoint.id, {
-        ...nextWaypoint,
-        distanceFromPrev: getDistanceNm(waypoint, nextWaypoint),
-        bearingFromPrev: getTrueCourseDeg(waypoint, nextWaypoint),
+        name: data.data.name || "Unnamed",
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const eventHandlers = useMemo(

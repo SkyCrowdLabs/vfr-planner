@@ -6,22 +6,15 @@ import { LatLng, LatLngTuple } from "leaflet";
 import WaypointMarker from "./WaypointMarker";
 import { Airport, Waypoint } from "@/types";
 import Enroute from "./Enroute";
+import { useRouteStore } from "@/store/store";
 
 interface MapProps {
   position: LatLngTuple;
   zoom: number;
-  waypoints: Waypoint[];
-  departure?: Airport;
-  destination?: Airport;
 }
 
-const MyMap: React.FC<MapProps> = ({
-  position,
-  zoom,
-  waypoints,
-  departure,
-  destination,
-}) => {
+const MyMap: React.FC<MapProps> = ({ position, zoom }) => {
+  const waypoints = useRouteStore((state) => state.waypoints);
   return (
     <MapContainer
       center={position}

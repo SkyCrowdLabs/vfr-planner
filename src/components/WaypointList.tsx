@@ -3,12 +3,12 @@ import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { Waypoint } from "@/types";
+import { useRouteStore } from "@/store/store";
 
-interface WaypointListProps {
-  waypoints: Waypoint[];
-}
+interface WaypointListProps {}
 
-const WaypointList: React.FC<WaypointListProps> = ({ waypoints }) => {
+const WaypointList: React.FC<WaypointListProps> = () => {
+  const waypoints = useRouteStore((state) => state.waypoints);
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {waypoints.map(({ id, name, distanceFromPrev, bearingFromPrev }, i) => {

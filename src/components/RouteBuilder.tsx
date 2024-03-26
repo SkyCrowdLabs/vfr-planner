@@ -48,17 +48,11 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
           "grow md:h-[calc(100vh-4rem)] md:max-h-none md:min-h-none max-h-[80%] min-h-[80%]"
         )}
       >
-        <Map
-          position={initPos}
-          zoom={7}
-          waypoints={waypoints}
-          departure={departure}
-          destination={destination}
-        />
+        <Map position={initPos} zoom={7} />
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)]">
         {departure?.ident} {destination?.ident}
-        <WaypointList waypoints={waypoints} />
+        <WaypointList />
         <p>
           Total:{" "}
           {waypoints

@@ -31,24 +31,12 @@ const Enroute: React.FC<EnrouteProps> = () => {
         fromLatlng.equals(waypoint.latlng)
       );
       if (fromWaypointIndex < 0) return;
-      const fromWaypoint = waypoints[fromWaypointIndex];
       const newWaypoint: Waypoint = {
         id: `waypoint-${waypoints.length + 1}`,
         name: data.data.name,
         latlng,
       };
-
-      const distanceFromPrev = getDistanceNm(fromWaypoint, newWaypoint);
-      const bearingFromPrev = getTrueCourseDeg(newWaypoint, fromWaypoint);
-
-      addWaypoint(
-        {
-          ...newWaypoint,
-          distanceFromPrev,
-          bearingFromPrev,
-        },
-        fromWaypointIndex
-      );
+      addWaypoint(newWaypoint, fromWaypointIndex);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -56,7 +44,6 @@ const Enroute: React.FC<EnrouteProps> = () => {
   const eventHandlers = useMemo(
     () => ({
       mousedown(e: LeafletMouseEvent) {
-        console.log("t", e.target._latlngs);
         setLatlng(e.latlng.wrap() as LatLng);
         setFromLatlng(e.target._latlngs[0].wrap() as LatLng);
       },

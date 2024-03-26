@@ -16,10 +16,10 @@ interface RouteState {
   error?: string;
   initializeRoute: (departure: Airport, destination: Airport) => void;
   addWaypoint: (waypoint: Waypoint, i: number) => void;
-  editWaypoint: (id: string, waypoint: Partial<Waypoint>) => void;
+  editWaypoint: (id: string, waypoint: Waypoint) => void;
   removeWaypoint: (id: string) => void;
-  saveRoute: () => void;
-  editRoute: () => void;
+  saveRoute: () => Promise<void>;
+  editRoute: () => Promise<void>;
   getRoute: () => Pick<
     RouteState,
     "id" | "name" | "departure" | "destination" | "waypoints"
@@ -83,8 +83,24 @@ export const useRouteStore = create<RouteState>()(
         }),
       addWaypoint: (waypoint, i) => {
         set((state) => {
+          const prevWaypoint = { ...state.waypoints[i - 1] };
+          const nextWaypoint = { ...state.waypoints[i] };
+
+          const currentWaypoint: Waypoint = {
+            ...waypoint,
+            distanceFromPrev: getDistanceNm(prevWaypoint, waypoint),
+            bearingFromPrev: getTrueCourseDeg(prevWaypoint, waypoint),
+          };
+          const updatedNextWaypoint: Waypoint = {
+            ...nextWaypoint,
+            distanceFromPrev: getDistanceNm(waypoint, nextWaypoint),
+            bearingFromPrev: getTrueCourseDeg(waypoint, nextWaypoint),
+          };
+
           const newWaypoints = [...state.waypoints];
-          newWaypoints.splice(i, 0, waypoint);
+          newWaypoints.splice(i, 0, currentWaypoint);
+          newWaypoints[i + 1] = updatedNextWaypoint;
+
           return {
             ...state,
             waypoints: newWaypoints,
@@ -94,9 +110,27 @@ export const useRouteStore = create<RouteState>()(
       },
       editWaypoint: (id, waypoint) => {
         set((state) => {
-          const index = state.waypoints.findIndex((w) => w.id === id);
+          console.log(JSON.stringify(waypoint));
+          const i = state.waypoints.findIndex((w) => w.id === id);
+          const prevWaypoint = { ...state.waypoints[i - 1] };
+          const nextWaypoint = { ...state.waypoints[i + 1] };
+          const currentWaypoint = { ...state.waypoints[i] };
+
+          const currentNewWaypoint: Waypoint = {
+            ...currentWaypoint,
+            ...waypoint,
+            distanceFromPrev: getDistanceNm(prevWaypoint, waypoint),
+            bearingFromPrev: getTrueCourseDeg(prevWaypoint, waypoint),
+          };
+          const updatedNextWaypoint: Waypoint = {
+            ...nextWaypoint,
+            distanceFromPrev: getDistanceNm(waypoint, nextWaypoint),
+            bearingFromPrev: getTrueCourseDeg(waypoint, nextWaypoint),
+          };
+
           const editedWaypoints = [...state.waypoints];
-          editedWaypoints[index] = { ...editedWaypoints[index], ...waypoint };
+          editedWaypoints[i] = currentNewWaypoint;
+          editedWaypoints[i + 1] = updatedNextWaypoint;
           return { ...state, waypoints: editedWaypoints, isModified: true };
         });
       },
