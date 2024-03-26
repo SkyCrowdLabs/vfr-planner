@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import Button from "./Button";
+import NewRoute from "./NewRoute";
 
 const Home = () => {
-  return <div>Home</div>;
+  const [isNewRouteOpen, setIsNewRouteOpen] = useState(false);
+  const openNewRoute = () => setIsNewRouteOpen(true);
+  return (
+    <>
+      <div>
+        <Button onClick={openNewRoute}>Create a route</Button>
+      </div>
+      <NewRoute open={isNewRouteOpen} setOpen={setIsNewRouteOpen} />
+    </>
+  );
 };
 
 export default Home;

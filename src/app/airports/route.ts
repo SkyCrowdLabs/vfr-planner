@@ -4,10 +4,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from("airports")
-    .select("*")
-    .eq("iso_country", "PH");
+  const search = request.nextUrl.searchParams.get("search");
+
+  const { data, error } = search
+    ? await supabase
+        .from("airports")
+        .select("*")
+        .eq("iso_country", "PH")
+        .textSearch("ident_name", search)
+    : await supabase.from("airports").select("*").eq("iso_country", "PH");
+
   if (error) {
     console.error(error);
     return NextResponse.json(
