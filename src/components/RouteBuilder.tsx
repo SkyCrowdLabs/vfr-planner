@@ -23,23 +23,15 @@ interface RouteBuilderProps {
 }
 
 const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const initPos: LatLngExpression = [14.599512, 120.984222];
   const resetRoute = useRouteStore((state) => state.resetRoute);
-
-  const departure = useRouteStore((state) => state.departure);
-  const destination = useRouteStore((state) => state.destination);
+  const saveRoute = useRouteStore((state) => state.saveRoute);
   const waypoints = useRouteStore((state) => state.waypoints);
-
-  const resetWaypoints = () => {
-    resetRoute();
-  };
 
   return (
     <div className="w-full h-full flex flex-col md:flex-row">
       <div
         className={clsx(
-          isLoading && "pointer-events-none opacity-50",
           "grow md:h-[calc(100vh-4rem)] md:max-h-none md:min-h-none max-h-[80%] min-h-[80%]"
         )}
       >
@@ -47,9 +39,14 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
         <WaypointList />
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full flex items-center justify-center gap-4">
           <div className="w-20 mt-5 pb-5">
-            <Button disabled={!waypoints.length} onClick={resetWaypoints}>
+            <Button disabled={!waypoints.length} onClick={saveRoute}>
+              Save
+            </Button>
+          </div>
+          <div className="w-20 mt-5 pb-5">
+            <Button disabled={!waypoints.length} onClick={resetRoute}>
               Reset
             </Button>
           </div>

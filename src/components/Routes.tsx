@@ -132,7 +132,7 @@ const Routes: React.FC<RouteProps> = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {routesResponse?.data?.length &&
+                    {!!routesResponse?.data?.length &&
                       routesResponse?.data?.map((route) => (
                         <tr
                           className="cursor-pointer hover:bg-gray-200"

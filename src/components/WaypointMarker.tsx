@@ -12,7 +12,6 @@ interface WaypointMarkerProps {
 }
 
 const WaypointMarker: React.FC<WaypointMarkerProps> = ({ waypoint }) => {
-  const waypoints = useRouteStore((state) => state.waypoints);
   const editWaypoint = useRouteStore((state) => state.editWaypoint);
   const markerRef = useRef(null);
   const [latlng, setLatlng] = useState<LatLng | undefined>(undefined);

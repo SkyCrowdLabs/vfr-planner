@@ -159,12 +159,13 @@ export const useRouteStore = create<RouteState>()(
         const data = await res.json();
         if (!res.ok) {
           set((state) => ({ ...state, error: data.message, isLoading: false }));
+          return;
         }
         set((state) => ({
           ...state,
           isLoading: false,
           isModified: false,
-          id: data.data.id,
+          id: data.id,
         }));
       },
       editRoute: async () => {

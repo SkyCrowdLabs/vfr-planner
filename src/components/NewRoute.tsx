@@ -106,55 +106,54 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
                           />
                         </Combobox.Button>
 
-                        {departureAirportsList &&
-                          departureAirportsList.length > 0 && (
-                            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                              {departureAirportsList &&
-                                departureAirportsList.map((airport) => (
-                                  <Combobox.Option
-                                    key={airport.id}
-                                    value={airport}
-                                    className={({ active }) =>
-                                      clsx(
-                                        "relative cursor-default select-none py-2 pl-3 pr-9",
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900"
-                                      )
-                                    }
-                                  >
-                                    {({ active, selected }) => (
-                                      <>
+                        {!!departureAirportsList?.length && (
+                          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {departureAirportsList &&
+                              departureAirportsList.map((airport) => (
+                                <Combobox.Option
+                                  key={airport.id}
+                                  value={airport}
+                                  className={({ active }) =>
+                                    clsx(
+                                      "relative cursor-default select-none py-2 pl-3 pr-9",
+                                      active
+                                        ? "bg-indigo-600 text-white"
+                                        : "text-gray-900"
+                                    )
+                                  }
+                                >
+                                  {({ active, selected }) => (
+                                    <>
+                                      <span
+                                        className={clsx(
+                                          "block truncate",
+                                          selected && "font-semibold"
+                                        )}
+                                      >
+                                        {airport.ident} {airport.name}
+                                      </span>
+
+                                      {selected && (
                                         <span
                                           className={clsx(
-                                            "block truncate",
-                                            selected && "font-semibold"
+                                            "absolute inset-y-0 right-0 flex items-center pr-4",
+                                            active
+                                              ? "text-white"
+                                              : "text-indigo-600"
                                           )}
                                         >
-                                          {airport.ident} {airport.name}
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
                                         </span>
-
-                                        {selected && (
-                                          <span
-                                            className={clsx(
-                                              "absolute inset-y-0 right-0 flex items-center pr-4",
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        )}
-                                      </>
-                                    )}
-                                  </Combobox.Option>
-                                ))}
-                            </Combobox.Options>
-                          )}
+                                      )}
+                                    </>
+                                  )}
+                                </Combobox.Option>
+                              ))}
+                          </Combobox.Options>
+                        )}
                       </div>
                     </Combobox>
                   </div>
@@ -181,55 +180,54 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
                           />
                         </Combobox.Button>
 
-                        {arrivalAirportsList &&
-                          arrivalAirportsList.length > 0 && (
-                            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                              {arrivalAirportsList &&
-                                arrivalAirportsList.map((airport) => (
-                                  <Combobox.Option
-                                    key={airport.id}
-                                    value={airport}
-                                    className={({ active }) =>
-                                      clsx(
-                                        "relative cursor-default select-none py-2 pl-3 pr-9",
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900"
-                                      )
-                                    }
-                                  >
-                                    {({ active, selected }) => (
-                                      <>
+                        {!!arrivalAirportsList.length && (
+                          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {arrivalAirportsList &&
+                              arrivalAirportsList.map((airport) => (
+                                <Combobox.Option
+                                  key={airport.id}
+                                  value={airport}
+                                  className={({ active }) =>
+                                    clsx(
+                                      "relative cursor-default select-none py-2 pl-3 pr-9",
+                                      active
+                                        ? "bg-indigo-600 text-white"
+                                        : "text-gray-900"
+                                    )
+                                  }
+                                >
+                                  {({ active, selected }) => (
+                                    <>
+                                      <span
+                                        className={clsx(
+                                          "block truncate",
+                                          selected && "font-semibold"
+                                        )}
+                                      >
+                                        {airport.ident} {airport.name}
+                                      </span>
+
+                                      {selected && (
                                         <span
                                           className={clsx(
-                                            "block truncate",
-                                            selected && "font-semibold"
+                                            "absolute inset-y-0 right-0 flex items-center pr-4",
+                                            active
+                                              ? "text-white"
+                                              : "text-indigo-600"
                                           )}
                                         >
-                                          {airport.ident} {airport.name}
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
                                         </span>
-
-                                        {selected && (
-                                          <span
-                                            className={clsx(
-                                              "absolute inset-y-0 right-0 flex items-center pr-4",
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        )}
-                                      </>
-                                    )}
-                                  </Combobox.Option>
-                                ))}
-                            </Combobox.Options>
-                          )}
+                                      )}
+                                    </>
+                                  )}
+                                </Combobox.Option>
+                              ))}
+                          </Combobox.Options>
+                        )}
                       </div>
                     </Combobox>
                   </div>
