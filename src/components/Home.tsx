@@ -1,6 +1,18 @@
 import React, { useState } from "react";
 import Button from "./Button";
-import NewRoute from "./NewRoute";
+import dynamic from "next/dynamic";
+import Spinner from "./Spinner";
+
+const NewRoute = dynamic(() => import("./NewRoute"), {
+  loading: () => (
+    <div className="h-full w-full z-0">
+      <div className="flex h-full w-full items-center justify-center">
+        <Spinner />
+      </div>
+    </div>
+  ),
+  ssr: false,
+});
 
 const Home = () => {
   const [isNewRouteOpen, setIsNewRouteOpen] = useState(false);

@@ -1,5 +1,3 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import { LatLng, LatLngExpression } from "leaflet";
 import React, { useState } from "react";

@@ -4,10 +4,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
-import { Waypoint } from "./RouteBuilder";
 import Pagination from "./Pagination";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { Waypoint } from "@/types";
 
 export interface Route {
   created_at: string;

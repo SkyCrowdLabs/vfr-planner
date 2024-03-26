@@ -11,8 +11,15 @@ export async function GET(request: NextRequest) {
         .from("airports")
         .select("*")
         .eq("iso_country", "PH")
+        .neq("type", "closed")
+        .neq("type", "heliport")
         .textSearch("ident_name", search)
-    : await supabase.from("airports").select("*").eq("iso_country", "PH");
+    : await supabase
+        .from("airports")
+        .select("*")
+        .eq("iso_country", "PH")
+        .neq("type", "heliport")
+        .neq("type", "closed");
 
   if (error) {
     console.error(error);

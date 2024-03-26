@@ -33,7 +33,7 @@ const Dashboard: NextPage = () => {
   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const supabase = createClient();
-  const [activeTab, setActiveTab] = useState("Map");
+  const [activeTab, setActiveTab] = useState("Home");
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -82,8 +82,9 @@ const Dashboard: NextPage = () => {
               {activeTab === "Map" && (
                 <RouteBuilder isLoggedIn={!!userProfile} />
               )}
+              {activeTab === "Map" && <div>Map</div>}
               {activeTab === "Routes" && <Routes />}
-              {activeTab === "Aircraft" && <Aircraft />}
+              {activeTab === "Aircraft" && <Aircraft />} *
               {activeTab === "Flights" && <Flights />}
             </main>
           </div>
