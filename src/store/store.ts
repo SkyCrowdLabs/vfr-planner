@@ -17,6 +17,10 @@ interface RouteState {
   removeWaypoint: (id: string) => void;
   saveRoute: () => void;
   editRoute: () => void;
+  getRoute: () => Pick<
+    RouteState,
+    "id" | "name" | "departure" | "destination" | "waypoints"
+  >;
 }
 
 export const useRouteStore = create<RouteState>()(
@@ -111,6 +115,16 @@ export const useRouteStore = create<RouteState>()(
           isLoading: false,
           isModified: false,
         }));
+      },
+      getRoute: () => {
+        const routeState = get();
+        return {
+          id: routeState.id,
+          name: routeState.name,
+          departure: routeState.departure,
+          destination: routeState.destination,
+          waypoints: routeState.waypoints,
+        };
       },
     }),
     {

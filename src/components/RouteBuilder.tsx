@@ -10,6 +10,7 @@ import Button from "./Button";
 import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
 import Spinner from "./Spinner";
 import { Waypoint } from "@/types";
+import { useRouteStore } from "@/store/store";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => (
@@ -29,152 +30,148 @@ interface RouteBuilderProps {
 const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
   const [isLoading, setIsLoading] = useState(false);
   const initPos: LatLngExpression = [14.599512, 120.984222];
-  const storedWaypoints = localStorage.getItem(LOCAL_STORAGE_WAYPOINTS_KEY);
-  const initWaypoints = storedWaypoints
-    ? JSON.parse(storedWaypoints).map((waypoint: Waypoint) => ({
-        ...waypoint,
-        latlng: new LatLng(waypoint.latlng.lat, waypoint.latlng.lng),
-      }))
-    : [];
+  const getRoute = useRouteStore((state) => state.getRoute);
+  const route = getRoute();
 
-  const [waypoints, setWaypoints] = useState<Waypoint[]>(initWaypoints);
+  const [waypoints, setWaypoints] = useState<Waypoint[]>(route.waypoints);
   const [waypointCount, setWaypointCount] = useState(waypoints.length);
+  console.log(route);
 
   const handleSave = async () => {
     setIsLoading(true);
 
-    const res = await fetch("/routes", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ name: "Saved route", waypoints }),
-    });
+    // const res = await fetch("/routes", {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({ name: "Saved route", waypoints }),
+    // });
 
-    if (!res.ok) {
-      console.error(res);
-    }
+    // if (!res.ok) {
+    //   console.error(res);
+    // }
     setIsLoading(false);
   };
 
   const addWaypoint = async (latlng: LatLng) => {
     setIsLoading(true);
-    const { lat, lng } = latlng.wrap() as LatLng;
-    const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
+    // const { lat, lng } = latlng.wrap() as LatLng;
+    // const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
 
-    if (!res.ok) {
-      console.error("There has been an error");
-    }
+    // if (!res.ok) {
+    //   console.error("There has been an error");
+    // }
 
-    const waypointNum = waypoints.length;
-    const data = await res.json();
+    // const waypointNum = waypoints.length;
+    // const data = await res.json();
 
-    const distanceFromPrev =
-      waypointNum > 0
-        ? waypoints[waypointNum - 1].latlng.distanceTo(latlng) / 1000
-        : undefined;
+    // const distanceFromPrev =
+    //   waypointNum > 0
+    //     ? waypoints[waypointNum - 1].latlng.distanceTo(latlng) / 1000
+    //     : undefined;
 
-    const p1 =
-      waypointNum > 0
-        ? new LatLon(
-            waypoints[waypointNum - 1].latlng.lat,
-            waypoints[waypointNum - 1].latlng.lng
-          )
-        : undefined;
-    const p2 = new LatLon(latlng.lat, latlng.lng);
-    const bearingFromPrev = p1?.initialBearingTo(p2);
+    // const p1 =
+    //   waypointNum > 0
+    //     ? new LatLon(
+    //         waypoints[waypointNum - 1].latlng.lat,
+    //         waypoints[waypointNum - 1].latlng.lng
+    //       )
+    //     : undefined;
+    // const p2 = new LatLon(latlng.lat, latlng.lng);
+    // const bearingFromPrev = p1?.initialBearingTo(p2);
 
-    const newWaypoints = [
-      ...waypoints,
-      {
-        name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-        latlng,
-        id: `waypoint-${waypointCount}`,
-        distanceFromPrev,
-        bearingFromPrev,
-      },
-    ];
-    setWaypoints(newWaypoints);
-    setWaypointCount(waypointCount + 1);
-    localStorage.setItem(
-      LOCAL_STORAGE_WAYPOINTS_KEY,
-      JSON.stringify(newWaypoints)
-    );
+    // const newWaypoints = [
+    //   ...waypoints,
+    //   {
+    //     name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+    //     latlng,
+    //     id: `waypoint-${waypointCount}`,
+    //     distanceFromPrev,
+    //     bearingFromPrev,
+    //   },
+    // ];
+    // setWaypoints(newWaypoints);
+    // setWaypointCount(waypointCount + 1);
+    // localStorage.setItem(
+    //   LOCAL_STORAGE_WAYPOINTS_KEY,
+    //   JSON.stringify(newWaypoints)
+    // );
     setIsLoading(false);
   };
 
   const editWaypoint = async (id: string, latlng: LatLng) => {
     setIsLoading(true);
-    const { lat, lng } = latlng.wrap() as LatLng;
+    // const { lat, lng } = latlng.wrap() as LatLng;
 
-    const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
+    // const res = await fetch(`/geocoding?lat=${lat}&lng=${lng}`);
 
-    if (!res.ok) {
-      console.error("There has been an error");
-    }
+    // if (!res.ok) {
+    //   console.error("There has been an error");
+    // }
 
-    const data = await res.json();
-    const waypointInfo = {
-      id,
-      name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-      latlng,
-    };
+    // const data = await res.json();
+    // const waypointInfo = {
+    //   id,
+    //   name: data.data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+    //   latlng,
+    // };
 
-    const waypointNum = waypoints.length;
-    const updatedWaypoints = waypoints.reduce((acc, waypoint, i) => {
-      if (id === waypoint.id) {
-        const distanceFromPrev =
-          i > 0 ? waypoints[i - 1].latlng.distanceTo(latlng) / 1000 : undefined;
-        const p1 =
-          i > 0
-            ? new LatLon(
-                waypoints[i - 1].latlng.lat,
-                waypoints[i - 1].latlng.lng
-              )
-            : undefined;
-        const p2 = new LatLon(latlng.lat, latlng.lng);
-        const bearingFromPrev = p1?.initialBearingTo(p2);
+    // const waypointNum = waypoints.length;
+    // const updatedWaypoints = waypoints.reduce((acc, waypoint, i) => {
+    //   if (id === waypoint.id) {
+    //     const distanceFromPrev =
+    //       i > 0 ? waypoints[i - 1].latlng.distanceTo(latlng) / 1000 : undefined;
+    //     const p1 =
+    //       i > 0
+    //         ? new LatLon(
+    //             waypoints[i - 1].latlng.lat,
+    //             waypoints[i - 1].latlng.lng
+    //           )
+    //         : undefined;
+    //     const p2 = new LatLon(latlng.lat, latlng.lng);
+    //     const bearingFromPrev = p1?.initialBearingTo(p2);
 
-        const newAcc = [...acc];
-        newAcc[i] = {
-          ...waypointInfo,
-          distanceFromPrev,
-          bearingFromPrev,
-        };
+    //     const newAcc = [...acc];
+    //     newAcc[i] = {
+    //       ...waypointInfo,
+    //       distanceFromPrev,
+    //       bearingFromPrev,
+    //     };
 
-        if (i + 1 < waypointNum) {
-          const nextWaypoint = waypoints[i + 1];
-          const nextDistanceFromPrev =
-            newAcc[i].latlng.distanceTo(nextWaypoint.latlng) / 1000;
-          const nP1 = new LatLon(newAcc[i].latlng.lat, newAcc[i].latlng.lng);
-          const nP2 = new LatLon(
-            nextWaypoint.latlng.lat,
-            nextWaypoint.latlng.lng
-          );
-          const nextBearingFromPrev = nP1?.initialBearingTo(nP2);
-          newAcc[i + 1] = {
-            ...nextWaypoint,
-            distanceFromPrev: nextDistanceFromPrev,
-            bearingFromPrev: nextBearingFromPrev,
-          };
-        }
+    //     if (i + 1 < waypointNum) {
+    //       const nextWaypoint = waypoints[i + 1];
+    //       const nextDistanceFromPrev =
+    //         newAcc[i].latlng.distanceTo(nextWaypoint.latlng) / 1000;
+    //       const nP1 = new LatLon(newAcc[i].latlng.lat, newAcc[i].latlng.lng);
+    //       const nP2 = new LatLon(
+    //         nextWaypoint.latlng.lat,
+    //         nextWaypoint.latlng.lng
+    //       );
+    //       const nextBearingFromPrev = nP1?.initialBearingTo(nP2);
+    //       newAcc[i + 1] = {
+    //         ...nextWaypoint,
+    //         distanceFromPrev: nextDistanceFromPrev,
+    //         bearingFromPrev: nextBearingFromPrev,
+    //       };
+    //     }
 
-        return newAcc;
-      }
-      return acc;
-    }, waypoints as Waypoint[]);
-    setWaypoints(updatedWaypoints);
-    localStorage.setItem(
-      LOCAL_STORAGE_WAYPOINTS_KEY,
-      JSON.stringify(updatedWaypoints)
-    );
+    //     return newAcc;
+    //   }
+    //   return acc;
+    // }, waypoints as Waypoint[]);
+    // setWaypoints(updatedWaypoints);
+    // localStorage.setItem(
+    //   LOCAL_STORAGE_WAYPOINTS_KEY,
+    //   JSON.stringify(updatedWaypoints)
+    // );
     setIsLoading(false);
   };
 
   const resetWaypoints = () => {
-    setWaypointCount(0);
-    setWaypoints([]);
-    localStorage.removeItem(LOCAL_STORAGE_WAYPOINTS_KEY);
+    // setWaypointCount(0);
+    // setWaypoints([]);
+    // localStorage.removeItem(LOCAL_STORAGE_WAYPOINTS_KEY);
   };
 
   const handleDragEnd = async (id: string, latlng: LatLng) => {
@@ -195,9 +192,12 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
           zoom={7}
           onMapClick={addWaypoint}
           waypoints={waypoints}
+          departure={route.departure}
+          destination={route.destination}
         />
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)]">
+        {route.departure?.ident} {route.destination?.ident}
         <WaypointList waypoints={waypoints} />
         <p>
           Total:{" "}

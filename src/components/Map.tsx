@@ -9,8 +9,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import { LatLng, LatLngTuple } from "leaflet";
-import { Waypoint } from "./RouteBuilder";
 import WaypointMarker from "./WaypointMarker";
+import { Airport, Waypoint } from "@/types";
 
 interface MapProps {
   position: LatLngTuple;
@@ -18,6 +18,8 @@ interface MapProps {
   onMapClick: (latlng: LatLng) => void;
   waypoints: Waypoint[];
   onDragEnd: (id: string, latlng: LatLng) => void;
+  departure?: Airport;
+  destination?: Airport;
 }
 
 const MyMap: React.FC<MapProps> = ({
@@ -26,6 +28,8 @@ const MyMap: React.FC<MapProps> = ({
   onMapClick,
   waypoints,
   onDragEnd,
+  departure,
+  destination,
 }) => {
   const LocationFinder = () => {
     useMapEvents({
@@ -35,6 +39,30 @@ const MyMap: React.FC<MapProps> = ({
       },
     });
     return null;
+  };
+  const DepartureMarker = () => {
+    return departure ? (
+      <Marker
+        position={
+          new LatLng(
+            departure.latitude_deg as number,
+            departure.longitude_deg as number
+          )
+        }
+      />
+    ) : undefined;
+  };
+  const DestinationMarker = () => {
+    return destination ? (
+      <Marker
+        position={
+          new LatLng(
+            destination.latitude_deg as number,
+            destination.longitude_deg as number
+          )
+        }
+      />
+    ) : undefined;
   };
   const WaypointPlotter = () => {
     return waypoints.map((waypoint) => {
@@ -61,6 +89,8 @@ const MyMap: React.FC<MapProps> = ({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <DepartureMarker />
+      <DestinationMarker />
       <LocationFinder />
       <WaypointPlotter />
       <Polyline positions={linePositions} />

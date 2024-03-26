@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import { Waypoint } from "./RouteBuilder";
+import { Waypoint } from "@/types";
 
 interface WaypointListProps {
   waypoints: Waypoint[];
