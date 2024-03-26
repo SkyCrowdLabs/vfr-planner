@@ -18,12 +18,12 @@ const Home = () => {
   const [isNewRouteOpen, setIsNewRouteOpen] = useState(false);
   const openNewRoute = () => setIsNewRouteOpen(true);
   return (
-    <>
+    <div className="flex w-full h-full items-center justify-center">
       <div>
         <Button onClick={openNewRoute}>Create a route</Button>
       </div>
       <NewRoute open={isNewRouteOpen} setOpen={setIsNewRouteOpen} />
-    </>
+    </div>
   );
 };
 

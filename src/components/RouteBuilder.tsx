@@ -31,11 +31,6 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
   const destination = useRouteStore((state) => state.destination);
   const waypoints = useRouteStore((state) => state.waypoints);
 
-  const handleSave = async () => {
-    setIsLoading(true);
-    setIsLoading(false);
-  };
-
   const resetWaypoints = () => {
     resetRoute();
   };
@@ -50,27 +45,15 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
       >
         <Map position={initPos} zoom={7} />
       </div>
-      <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)]">
-        {departure?.ident} {destination?.ident}
+      <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
         <WaypointList />
-        <p>
-          Total:{" "}
-          {waypoints
-            .reduce(
-              (acc, { distanceFromPrev }) => acc + (distanceFromPrev || 0),
-              0
-            )
-            .toFixed(2)}
-        </p>
-        <Button
-          disabled={!waypoints.length || !isLoggedIn}
-          onClick={handleSave}
-        >
-          Save
-        </Button>
-        <Button disabled={!waypoints.length} onClick={resetWaypoints}>
-          Reset
-        </Button>
+        <div className="w-full flex items-center justify-center">
+          <div className="w-20 mt-5">
+            <Button disabled={!waypoints.length} onClick={resetWaypoints}>
+              Reset
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
