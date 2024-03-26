@@ -26,7 +26,9 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
   const resetRoute = useRouteStore((state) => state.resetRoute);
   const saveRoute = useRouteStore((state) => state.saveRoute);
+  const editRoute = useRouteStore((state) => state.editRoute);
   const waypoints = useRouteStore((state) => state.waypoints);
+  const routeId = useRouteStore((state) => state.id);
 
   return (
     <div className="w-full h-full flex flex-col md:flex-row">
@@ -41,9 +43,15 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
         <WaypointList />
         <div className="w-full flex items-center justify-center gap-4">
           <div className="w-20 mt-5 pb-5">
-            <Button disabled={!waypoints.length} onClick={saveRoute}>
-              Save
-            </Button>
+            {routeId ? (
+              <Button disabled={!waypoints.length} onClick={editRoute}>
+                Update
+              </Button>
+            ) : (
+              <Button disabled={!waypoints.length} onClick={saveRoute}>
+                Save
+              </Button>
+            )}
           </div>
           <div className="w-20 mt-5 pb-5">
             <Button disabled={!waypoints.length} onClick={resetRoute}>

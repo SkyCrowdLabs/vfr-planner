@@ -25,11 +25,17 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { error, data } = await supabase.from("routes").insert({
-    name: body.name,
-    waypoints: JSON.parse(JSON.stringify(body.waypoints)),
-    user_id: userRes.data?.user?.id,
-  });
+  const { error, data } = await supabase
+    .from("routes")
+    .insert({
+      name: body.name,
+      waypoints: JSON.parse(JSON.stringify(body.waypoints)),
+      user_id: userRes.data?.user?.id,
+    })
+    .select()
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .single();
   if (error) {
     console.error(error);
     return NextResponse.json(

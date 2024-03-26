@@ -6,10 +6,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface RouteState {
-  id: string | undefined;
-  name: string | undefined;
-  departure: Airport | undefined;
-  destination: Airport | undefined;
+  id?: string | undefined;
+  name?: string | undefined;
+  departure?: Airport | undefined;
+  destination?: Airport | undefined;
   waypoints: Waypoint[];
   isModified: boolean;
   isLoading: boolean;
@@ -165,7 +165,7 @@ export const useRouteStore = create<RouteState>()(
           ...state,
           isLoading: false,
           isModified: false,
-          id: data.id,
+          id: data.data.id,
         }));
       },
       editRoute: async () => {
