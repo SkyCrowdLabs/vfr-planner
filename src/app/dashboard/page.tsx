@@ -6,7 +6,6 @@ import Navigation from "@/components/Navigation";
 import { NextPage } from "next";
 import { createClient } from "@/utils/supabase/client";
 import dynamic from "next/dynamic";
-import Routes from "@/components/Routes";
 import Aircraft from "@/components/Aircraft";
 import Flights from "@/components/Flights";
 import { AuthContext, UserProfile } from "@/context/AuthContext";
@@ -16,6 +15,17 @@ import { useRouter } from "next/navigation";
 import Home from "@/components/Home";
 
 const RouteBuilder = dynamic(() => import("@/components/RouteBuilder"), {
+  loading: () => (
+    <div className="h-full w-full z-0">
+      <div className="flex h-full w-full items-center justify-center">
+        <Spinner />
+      </div>
+    </div>
+  ),
+  ssr: false,
+});
+
+const Routes = dynamic(() => import("@/components/Routes"), {
   loading: () => (
     <div className="h-full w-full z-0">
       <div className="flex h-full w-full items-center justify-center">
