@@ -6,10 +6,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface RouteState {
-  id?: string;
-  name?: string;
-  departure?: Airport;
-  destination?: Airport;
+  id: string | undefined;
+  name: string | undefined;
+  departure: Airport | undefined;
+  destination: Airport | undefined;
   waypoints: Waypoint[];
   isModified: boolean;
   isLoading: boolean;
