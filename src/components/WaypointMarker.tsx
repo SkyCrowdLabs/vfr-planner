@@ -23,7 +23,6 @@ const WaypointMarker: React.FC<WaypointMarkerProps> = ({ waypoint }) => {
 
   useEffect(() => {
     if (latlng && data) {
-      console.log(data);
       editWaypoint(waypoint.id, {
         ...waypoint,
         latlng,

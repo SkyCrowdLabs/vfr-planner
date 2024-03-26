@@ -110,7 +110,6 @@ export const useRouteStore = create<RouteState>()(
       },
       editWaypoint: (id, waypoint) => {
         set((state) => {
-          console.log(JSON.stringify(waypoint));
           const i = state.waypoints.findIndex((w) => w.id === id);
           const prevWaypoint = { ...state.waypoints[i - 1] };
           const nextWaypoint = { ...state.waypoints[i + 1] };
