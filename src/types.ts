@@ -40,3 +40,12 @@ export interface GeocodingResponse {
     state: string;
   };
 }
+
+export interface Route {
+  id?: string | undefined;
+  name?: string | undefined;
+  departure?: Airport | undefined;
+  destination?: Airport | undefined;
+  waypoints: Waypoint[];
+  created_at?: string;
+}

@@ -1,16 +1,11 @@
-import { Airport, Waypoint } from "@/types";
+import { Airport, Route, Waypoint } from "@/types";
 import { getDistanceNm } from "@/utils/getDistanceNm";
 import { getTrueCourseDeg } from "@/utils/getTrueCourse";
 import { LatLng } from "leaflet";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface RouteState {
-  id?: string | undefined;
-  name?: string | undefined;
-  departure?: Airport | undefined;
-  destination?: Airport | undefined;
-  waypoints: Waypoint[];
+interface RouteState extends Route {
   isModified: boolean;
   isLoading: boolean;
   error?: string;
@@ -20,10 +15,7 @@ interface RouteState {
   removeWaypoint: (id: string) => void;
   saveRoute: () => Promise<void>;
   editRoute: () => Promise<void>;
-  getRoute: () => Pick<
-    RouteState,
-    "id" | "name" | "departure" | "destination" | "waypoints"
-  >;
+  loadRoute: (route: Route) => void;
   resetRoute: () => void;
 }
 
@@ -193,15 +185,13 @@ export const useRouteStore = create<RouteState>()(
           isModified: false,
         }));
       },
-      getRoute: () => {
-        const routeState = get();
-        return {
-          id: routeState.id,
-          name: routeState.name,
-          departure: routeState.departure,
-          destination: routeState.destination,
-          waypoints: routeState.waypoints,
-        };
+      loadRoute: (route: Route) => {
+        set((state) => ({
+          ...state,
+          ...route,
+          isLoading: false,
+          isModified: false,
+        }));
       },
       resetRoute: () => set((state) => ({ ...state, ...initialRouteState })),
     }),

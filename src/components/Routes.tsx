@@ -1,54 +1,35 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
-import { LOCAL_STORAGE_WAYPOINTS_KEY } from "@/constants";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import Pagination from "./Pagination";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
-import { Waypoint } from "@/types";
-
-export interface Route {
-  created_at: string;
-  id: number;
-  name: string | null;
-  user_id: string | null;
-  waypoints: Waypoint[];
-}
+import { Route } from "@/types";
+import { useRouteStore } from "@/store/store";
 
 interface RouteProps {}
 
 const Routes: React.FC<RouteProps> = () => {
-  const router = useRouter();
-  const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
   const [selectedPage, setSelectedPage] = useState(1);
-  const [selectedRouteId, setSelectedRouteId] = useState<number | undefined>(
+  const [selectedRouteId, setSelectedRouteId] = useState<string | undefined>(
     undefined
   );
   const [count, setCount] = useState(0);
 
+  const loadRoute = useRouteStore((state) => state.loadRoute);
   const { data: routesResponse, error } = useSWR<{
     data: Route[];
     count: number;
-  }>(`/routes?offset=${offset}&limit=${limit}`, fetcher);
+  }>(`/routes?offset=${offset}&limit=10`, fetcher);
 
   const { data: selectedRoute } = useSWR<{ data: Route }>(
     selectedRouteId ? `/routes/${selectedRouteId}` : null,
     fetcher
   );
 
-  useEffect(() => {
-    if (selectedRoute) {
-      localStorage.setItem(
-        LOCAL_STORAGE_WAYPOINTS_KEY,
-        JSON.stringify(selectedRoute.data.waypoints)
-      );
-    }
-  }, [selectedRoute]);
-
-  const onClickRoute = async (id: number) => {
+  const onClickRoute = async (id: string) => {
     setSelectedRouteId(id);
   };
 
@@ -69,6 +50,10 @@ const Routes: React.FC<RouteProps> = () => {
   useEffect(() => {
     setCount(routesResponse?.count || 0);
   }, [routesResponse]);
+
+  useEffect(() => {
+    if (selectedRoute) loadRoute(selectedRoute.data);
+  }, [loadRoute, selectedRoute]);
 
   return (
     <div className="flex grow flex-row justify-center md:mt-8 mt-4">
@@ -137,7 +122,7 @@ const Routes: React.FC<RouteProps> = () => {
                         <tr
                           className="cursor-pointer hover:bg-gray-200"
                           onClick={() => {
-                            onClickRoute(route.id);
+                            if (route.id) onClickRoute(route.id);
                           }}
                           key={route.id}
                         >
@@ -164,7 +149,8 @@ const Routes: React.FC<RouteProps> = () => {
                             {route.waypoints[route.waypoints.length - 1].name}
                           </td>
                           <td className="px-3 py-4 text-sm text-gray-500 min-w-48 sm:min-w-0">
-                            {format(route.created_at, "HH:mm dd-MMM-yyyy")}
+                            {route.created_at &&
+                              format(route.created_at, "HH:mm dd-MMM-yyyy")}
                           </td>
                           <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <a
