@@ -2,13 +2,7 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-
-const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
-];
+import Image from "next/image";
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -21,12 +15,14 @@ export default function LandingPage() {
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt=""
+            <a href="/dashboard" className="-m-1.5 p-1.5">
+              <span className="sr-only">VFR Planner</span>
+              <Image
+                src="/favicon-32x32.png"
+                alt="airplane emoji"
+                className="w-8 h-auto"
+                width={32}
+                height={32}
               />
             </a>
           </div>
@@ -39,17 +35,6 @@ export default function LandingPage() {
               <span className="sr-only">Open main menu</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
-          </div>
-          <div className="hidden lg:flex lg:gap-x-12">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                {item.name}
-              </a>
-            ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a
@@ -70,11 +55,13 @@ export default function LandingPage() {
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
+                <span className="sr-only">VFR Planner</span>
+                <Image
+                  src="/favicon-32x32.png"
+                  alt="airplane emoji"
+                  className="w-8 h-auto"
+                  width={32}
+                  height={32}
                 />
               </a>
               <button
@@ -88,17 +75,6 @@ export default function LandingPage() {
             </div>
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
                 <div className="py-6">
                   <a
                     href="/dashboard"
@@ -130,12 +106,12 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Data to enrich your online business
+                Precision VFR flight planning
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-                lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-                fugiat aliqua.
+                Elevate your VFR flights with meticulously curated plans,
+                offering precision, safety, and scenic immersion, empowering you
+                to explore confidently and effortlessly.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <a
@@ -145,7 +121,7 @@ export default function LandingPage() {
                   Get started
                 </a>
                 <a
-                  href="#"
+                  href="https://www.skycrowd.dev/"
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
                   Learn more <span aria-hidden="true">→</span>
@@ -154,12 +130,12 @@ export default function LandingPage() {
             </div>
             <div className="mt-16 flow-root sm:mt-24">
               <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-                <img
-                  src="https://tailwindui.com/img/component-images/project-app-screenshot.png"
-                  alt="App screenshot"
-                  width={2432}
+                <Image
+                  src="/app-screenshot.png"
+                  alt="app screenshot"
+                  className="w-[1200px] h-auto"
+                  width={1200}
                   height={1442}
-                  className="rounded-md shadow-2xl ring-1 ring-gray-900/10"
                 />
               </div>
             </div>
