@@ -2,14 +2,14 @@
 import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
 import React from "react";
-import WaypointList from "@/components/WaypointList";
+import WaypointList from "@/app/dashboard/map/WaypointList";
 import clsx from "clsx";
 import Button from "@/components/Button";
 import Spinner from "@/components/Spinner";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
 
-const Map = dynamic(() => import("@/components/Map"), {
+const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
     <div className="h-full w-full z-0">
       <div className="flex h-full w-full items-center justify-center">

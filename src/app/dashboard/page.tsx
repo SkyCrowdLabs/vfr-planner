@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Button from "@/components/Button";
 import { NextPage } from "next";
-import NewRoute from "@/components/NewRoute";
+import NewRoute from "@/app/dashboard/NewRoute";
 
 const Home: NextPage = () => {
   const [isNewRouteOpen, setIsNewRouteOpen] = useState(false);

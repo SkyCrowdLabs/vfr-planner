@@ -1,8 +1,6 @@
 import { useRouteStore } from "@/store/store";
 import { GeocodingResponse, Waypoint } from "@/types";
 import { fetcher } from "@/utils/fetcher";
-import { getDistanceNm } from "@/utils/getDistanceNm";
-import { getTrueCourseDeg } from "@/utils/getTrueCourse";
 import { LatLng, LeafletMouseEvent } from "leaflet";
 import randomColor from "randomcolor";
 import React, { useEffect, useMemo, useState } from "react";

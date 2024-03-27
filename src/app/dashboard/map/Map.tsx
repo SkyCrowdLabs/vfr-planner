@@ -2,9 +2,8 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import { LatLng, LatLngTuple } from "leaflet";
+import { LatLngTuple } from "leaflet";
 import WaypointMarker from "./WaypointMarker";
-import { Airport, Waypoint } from "@/types";
 import Enroute from "./Enroute";
 import { useRouteStore } from "@/store/store";
 

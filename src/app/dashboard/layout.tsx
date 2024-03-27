@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import Navigation from "@/components/Navigation";
+import Sidebar from "@/app/dashboard/Sidebar";
+import Navigation from "@/app/dashboard/Navigation";
 import { NextPage } from "next";
 import { createClient } from "@/utils/supabase/client";
 import { AuthContext, UserProfile } from "@/context/AuthContext";

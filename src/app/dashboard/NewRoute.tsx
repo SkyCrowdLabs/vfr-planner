@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { Airport } from "@/types";
 import { useRouteStore } from "@/store/store";
+import { useRouter } from "next/navigation";
 
 interface NewRouteProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface NewRouteProps {
 }
 
 const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
+  const router = useRouter();
   const initializeRoute = useRouteStore((state) => state.initializeRoute);
   const cancelButtonRef = useRef(null);
   const [departureSearch, setDepartureSearch] = useState("");
@@ -37,6 +39,7 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
   const initialize = () => {
     if (!departure || !arrival) return;
     initializeRoute(departure, arrival);
+    router.push("/dashboard/map");
     setOpen(false);
   };
 
