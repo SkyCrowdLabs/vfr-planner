@@ -41,9 +41,7 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
     if (!departure || !arrival) return;
     initializeRoute(departure, arrival);
     router.push("/dashboard/map");
-    toast.success("New route has been created!", {
-      id: `success-${departure.name}-${arrival.name}`,
-    });
+    toast.success("New route has been created!");
     setOpen(false);
   };
 

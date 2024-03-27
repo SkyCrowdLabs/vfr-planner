@@ -10,8 +10,10 @@ const Button: React.FC<ButtonProps> = ({ isLoading, children, ...props }) => {
     <button
       {...props}
       className={clsx(
-        "flex w-full justify-center items-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
-        isLoading && "bg-gray-500"
+        "flex w-full justify-center items-center rounded-md  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+        isLoading
+          ? "bg-gray-500 cursor-not-allowed"
+          : "bg-indigo-600 hover:bg-indigo-500"
       )}
     >
       {isLoading && (

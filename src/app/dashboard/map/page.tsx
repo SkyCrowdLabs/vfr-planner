@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Spinner from "@/components/Spinner";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
+import toast from "react-hot-toast";
 
 const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
@@ -25,8 +26,16 @@ const RouteBuilder: NextPage = () => {
   const resetRoute = useRouteStore((state) => state.resetRoute);
   const saveRoute = useRouteStore((state) => state.saveRoute);
   const editRoute = useRouteStore((state) => state.editRoute);
+  const error = useRouteStore((state) => state.error);
+  const isLoading = useRouteStore((state) => state.isLoading);
   const waypoints = useRouteStore((state) => state.waypoints);
   const routeId = useRouteStore((state) => state.id);
+
+  const handleSave = async () => {
+    await saveRoute();
+    if (error) toast.error("There has been a problem saving the route");
+    toast.success("Route has been saved successfully!");
+  };
 
   return (
     <div className="w-full h-full flex flex-col md:flex-row">
@@ -46,7 +55,11 @@ const RouteBuilder: NextPage = () => {
                 Update
               </Button>
             ) : (
-              <Button disabled={!waypoints.length} onClick={saveRoute}>
+              <Button
+                isLoading={isLoading}
+                disabled={!waypoints.length}
+                onClick={handleSave}
+              >
                 Save
               </Button>
             )}

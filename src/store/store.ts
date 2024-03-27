@@ -206,7 +206,6 @@ export const useRouteStore = create<RouteState>()(
         isLoading: state.isLoading,
         error: state.error,
       }),
-      skipHydration: true,
     }
   )
 );
