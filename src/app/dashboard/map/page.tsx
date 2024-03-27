@@ -70,7 +70,7 @@ const RouteBuilder: NextPage = () => {
       >
         <Map position={initPos} zoom={7} />
       </div>
-      <div className="bg-white min-w-72 max-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
+      <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
         <div className="w-full min-h-full flex flex-col justify-start gap-4">
           <WaypointList />
           {!!waypoints?.length ? (
