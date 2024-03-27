@@ -38,16 +38,16 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
       href: "/dashboard/routes",
       icon: MapPinIcon,
     },
-    {
-      name: "Aircraft",
-      href: "/dashboard/aircraft",
-      icon: PaperAirplaneIcon,
-    },
-    {
-      name: "Flights",
-      href: "/dashboard/flights",
-      icon: ArchiveBoxIcon,
-    },
+    // {
+    //   name: "Aircraft",
+    //   href: "/dashboard/aircraft",
+    //   icon: PaperAirplaneIcon,
+    // },
+    // {
+    //   name: "Flights",
+    //   href: "/dashboard/flights",
+    //   icon: ArchiveBoxIcon,
+    // },
   ];
 
   return (
