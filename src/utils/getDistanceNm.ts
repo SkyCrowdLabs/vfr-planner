@@ -1,8 +1,8 @@
 import { Waypoint } from "@/types";
-import { LatLng } from "leaflet";
+import LatLon from "geodesy/latlon-spherical.js";
 
-export function getDistanceNm(p1: Waypoint, p2: Waypoint): number {
-  const np1 = new LatLng(p1.latlng.lat, p1.latlng.lng);
-  const np2 = new LatLng(p2.latlng.lat, p2.latlng.lng);
-  return np1.distanceTo(np2) / 1852;
+export function getDistanceNm(f: Waypoint, t: Waypoint): number {
+  const p1 = new LatLon(f.latlng.lat, f.latlng.lng);
+  const p2 = new LatLon(t.latlng.lat, t.latlng.lng);
+  return p1.distanceTo(p2) * LatLon.metresToNauticalMiles;
 }

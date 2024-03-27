@@ -12,45 +12,41 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
 import clsx from "clsx";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (s: boolean) => void;
-  activeTab: string;
-  setActiveTab: (s: string) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  sidebarOpen,
-  setSidebarOpen,
-  activeTab,
-  setActiveTab,
-}) => {
+const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+  const pathname = usePathname();
   const navigation = [
     {
       name: "Home",
-      href: "#",
+      href: "/dashboard",
       icon: HomeIcon,
-      current: activeTab === "Home",
     },
-    { name: "Map", href: "#", icon: MapIcon, current: activeTab === "Map" },
+    {
+      name: "Map",
+      href: "/dashboard/map",
+      icon: MapIcon,
+    },
     {
       name: "Routes",
-      href: "#",
+      href: "/dashboard/routes",
       icon: MapPinIcon,
-      current: activeTab === "Routes",
     },
     {
       name: "Aircraft",
-      href: "#",
+      href: "/dashboard/aircraft",
       icon: PaperAirplaneIcon,
-      current: activeTab === "Aircraft",
     },
     {
       name: "Flights",
-      href: "#",
+      href: "/dashboard/flights",
       icon: ArchiveBoxIcon,
-      current: activeTab === "Flights",
     },
   ];
 
@@ -117,10 +113,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <a
-                                onClick={() => setActiveTab(item.name)}
+                              <Link
+                                href={item.href}
                                 className={clsx(
-                                  item.current
+                                  pathname === item.href
                                     ? "bg-gray-800 text-white"
                                     : "text-gray-400 hover:text-white hover:bg-gray-800",
                                   "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -131,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                   aria-hidden="true"
                                 />
                                 {item.name}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>
@@ -168,10 +164,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
-                        onClick={() => setActiveTab(item.name)}
+                      <Link
+                        href={item.href}
                         className={clsx(
-                          item.current
+                          pathname === item.href
                             ? "bg-gray-800 text-white"
                             : "text-gray-400 hover:text-white hover:bg-gray-800",
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -182,7 +178,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           aria-hidden="true"
                         />
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

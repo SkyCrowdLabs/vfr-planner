@@ -18,7 +18,7 @@ const Enroute: React.FC<EnrouteProps> = () => {
   const linePositions = waypoints.reduce((acc, { latlng }, i) => {
     if (i === 0) return acc;
     return [...acc, [latlng, waypoints[i - 1].latlng]];
-  }, [] as LatLng[][]);
+  }, [] as { lat: number; lng: number }[][]);
   const addWaypoint = useRouteStore((state) => state.addWaypoint);
   const { data } = useSWR<GeocodingResponse>(
     latlng ? `/geocoding?lat=${latlng.lat}&lng=${latlng.lng}` : null,

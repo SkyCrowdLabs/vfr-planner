@@ -1,11 +1,13 @@
+"use client";
 import dynamic from "next/dynamic";
-import { LatLng, LatLngExpression } from "leaflet";
-import React, { useState } from "react";
-import WaypointList from "./WaypointList";
+import { LatLngExpression } from "leaflet";
+import React from "react";
+import WaypointList from "@/components/WaypointList";
 import clsx from "clsx";
-import Button from "./Button";
-import Spinner from "./Spinner";
+import Button from "@/components/Button";
+import Spinner from "@/components/Spinner";
 import { useRouteStore } from "@/store/store";
+import { NextPage } from "next";
 
 const Map = dynamic(() => import("@/components/Map"), {
   loading: () => (
@@ -18,11 +20,7 @@ const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
-interface RouteBuilderProps {
-  isLoggedIn?: boolean;
-}
-
-const RouteBuilder: React.FC<RouteBuilderProps> = ({ isLoggedIn }) => {
+const RouteBuilder: NextPage = () => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
   const resetRoute = useRouteStore((state) => state.resetRoute);
   const saveRoute = useRouteStore((state) => state.saveRoute);

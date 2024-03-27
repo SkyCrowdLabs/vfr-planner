@@ -3,14 +3,15 @@
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
-import Pagination from "./Pagination";
+import Pagination from "@/components/Pagination";
 import { format } from "date-fns";
 import { Route } from "@/types";
 import { useRouteStore } from "@/store/store";
+import { NextPage } from "next";
 
 interface RouteProps {}
 
-const Routes: React.FC<RouteProps> = () => {
+const Routes: NextPage<RouteProps> = () => {
   const [offset, setOffset] = useState(0);
   const [selectedPage, setSelectedPage] = useState(1);
   const [selectedRouteId, setSelectedRouteId] = useState<string | undefined>(
@@ -19,11 +20,12 @@ const Routes: React.FC<RouteProps> = () => {
   const [count, setCount] = useState(0);
 
   const loadRoute = useRouteStore((state) => state.loadRoute);
+  const isModified = useRouteStore((state) => state.isModified);
+
   const { data: routesResponse, error } = useSWR<{
     data: Route[];
     count: number;
   }>(`/routes?offset=${offset}&limit=10`, fetcher);
-
   const { data: selectedRoute } = useSWR<{ data: Route }>(
     selectedRouteId ? `/routes/${selectedRouteId}` : null,
     fetcher
@@ -32,7 +34,6 @@ const Routes: React.FC<RouteProps> = () => {
   const onClickRoute = async (id: string) => {
     setSelectedRouteId(id);
   };
-
   const handleNext = () => {
     const nextPage = selectedPage + 1;
     if ((nextPage - 1) * 10 < count) setSelectedPage(nextPage);
@@ -44,13 +45,13 @@ const Routes: React.FC<RouteProps> = () => {
   const handleClickPage = (n: number) => {
     setSelectedPage(n);
   };
+
   useEffect(() => {
     setOffset((selectedPage - 1) * 10);
   }, [selectedPage]);
   useEffect(() => {
     setCount(routesResponse?.count || 0);
   }, [routesResponse]);
-
   useEffect(() => {
     if (selectedRoute) loadRoute(selectedRoute.data);
   }, [loadRoute, selectedRoute]);
@@ -75,6 +76,7 @@ const Routes: React.FC<RouteProps> = () => {
             >
               Add route
             </button>
+            {isModified}
           </div>
         </div>
         <div className="mt-8 flow-root">

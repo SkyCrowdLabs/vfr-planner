@@ -24,7 +24,10 @@ export interface Airport {
 export interface Waypoint {
   id: string;
   name: string;
-  latlng: LatLng;
+  latlng: {
+    lat: number;
+    lng: number;
+  };
   distanceFromPrev?: number;
   bearingFromPrev?: number;
 }
