@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
-import React from "react";
+import React, { useState } from "react";
 import WaypointList from "@/app/dashboard/map/WaypointList";
 import clsx from "clsx";
 import Button from "@/components/Button";
@@ -9,6 +9,7 @@ import Spinner from "@/components/Spinner";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
 import toast from "react-hot-toast";
+import ConfirmReset from "./ConfirmReset";
 
 const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
@@ -23,19 +24,35 @@ const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
 
 const RouteBuilder: NextPage = () => {
   const initPos: LatLngExpression = [14.599512, 120.984222];
-  const resetRoute = useRouteStore((state) => state.resetRoute);
   const saveRoute = useRouteStore((state) => state.saveRoute);
   const editRoute = useRouteStore((state) => state.editRoute);
   const error = useRouteStore((state) => state.error);
   const isLoading = useRouteStore((state) => state.isLoading);
   const isMapBusy = useRouteStore((state) => state.isMapBusy);
+  const isModified = useRouteStore((state) => state.isModified);
   const waypoints = useRouteStore((state) => state.waypoints);
   const routeId = useRouteStore((state) => state.id);
+  const [showConfirmReset, setShowConfirmReset] = useState(false);
 
   const handleSave = async () => {
     await saveRoute();
     if (error) toast.error("There has been a problem saving the route");
     toast.success("Route has been saved successfully!");
+  };
+  const handleUpdate = async () => {
+    if (!isModified) {
+      toast.error("There are no changes to save");
+      return;
+    }
+    await editRoute();
+    if (error) {
+      toast.error("There has been a problem saving the route");
+      return;
+    }
+    toast.success("Route has been updated");
+  };
+  const handleReset = async () => {
+    setShowConfirmReset(true);
   };
 
   return (
@@ -54,30 +71,43 @@ const RouteBuilder: NextPage = () => {
         <Map position={initPos} zoom={7} />
       </div>
       <div className="bg-white min-w-72 max-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
-        <WaypointList />
-        <div className="w-full flex items-center justify-center gap-4">
-          <div className="w-20 mt-5 pb-5">
-            {routeId ? (
-              <Button disabled={!waypoints.length} onClick={editRoute}>
-                Update
-              </Button>
-            ) : (
-              <Button
-                isLoading={isLoading}
-                disabled={!waypoints.length}
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-            )}
-          </div>
-          <div className="w-20 mt-5 pb-5">
-            <Button disabled={!waypoints.length} onClick={resetRoute}>
-              Reset
-            </Button>
-          </div>
+        <div className="w-full min-h-full flex flex-col justify-start gap-4">
+          <WaypointList />
+          {!!waypoints?.length ? (
+            <>
+              <div>
+                {routeId ? (
+                  <Button
+                    isLoading={isLoading}
+                    disabled={!waypoints.length}
+                    onClick={handleUpdate}
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  <Button
+                    isLoading={isLoading}
+                    disabled={!waypoints.length}
+                    onClick={handleSave}
+                  >
+                    Save
+                  </Button>
+                )}
+              </div>
+              <div className="pb-5">
+                <Button disabled={!waypoints.length} onClick={handleReset}>
+                  Reset
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="mt-5 pb-5 h-full flex justify-center items-center grow">
+              <p className="text-gray-700">There is no loaded route</p>
+            </div>
+          )}
         </div>
       </div>
+      <ConfirmReset open={showConfirmReset} setOpen={setShowConfirmReset} />
     </div>
   );
 };
