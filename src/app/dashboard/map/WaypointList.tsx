@@ -9,6 +9,7 @@ interface WaypointListProps {}
 
 const WaypointList: React.FC<WaypointListProps> = () => {
   const waypoints = useRouteStore((state) => state.waypoints);
+  const removeWaypoint = useRouteStore((state) => state.removeWaypoint);
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {waypoints.map(({ id, name, distanceFromPrev, bearingFromPrev }, i) => {
@@ -50,42 +51,18 @@ const WaypointList: React.FC<WaypointListProps> = () => {
                 >
                   <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                     <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
+                      {({ focus }) => (
+                        <button
+                          onClick={() => {
+                            removeWaypoint(id);
+                          }}
                           className={clsx(
-                            active ? "bg-gray-50" : "",
-                            "block px-3 py-1 text-sm leading-6 text-gray-900"
-                          )}
-                        >
-                          Edit<span className="sr-only">, {name}</span>
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={clsx(
-                            active ? "bg-gray-50" : "",
-                            "block px-3 py-1 text-sm leading-6 text-gray-900"
-                          )}
-                        >
-                          Move<span className="sr-only">, {name}</span>
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={clsx(
-                            active ? "bg-gray-50" : "",
+                            focus ? "bg-gray-50" : "",
                             "block px-3 py-1 text-sm leading-6 text-gray-900"
                           )}
                         >
                           Delete<span className="sr-only">, {name}</span>
-                        </a>
+                        </button>
                       )}
                     </Menu.Item>
                   </Menu.Items>
