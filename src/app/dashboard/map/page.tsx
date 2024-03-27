@@ -79,7 +79,7 @@ const RouteBuilder: NextPage = () => {
                 {routeId ? (
                   <Button
                     isLoading={isLoading}
-                    disabled={!waypoints.length}
+                    disabled={!waypoints.length || !isModified}
                     onClick={handleUpdate}
                   >
                     Update
@@ -96,7 +96,7 @@ const RouteBuilder: NextPage = () => {
               </div>
               <div className="pb-5">
                 <Button disabled={!waypoints.length} onClick={handleReset}>
-                  Reset
+                  Clear
                 </Button>
               </div>
             </>

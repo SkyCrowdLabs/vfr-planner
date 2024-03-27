@@ -62,11 +62,11 @@ const ConfirmReset: React.FC<ConfirmResetProps> = ({ open, setOpen }) => {
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Reset route
+                      Clear route
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Are you sure you want to reset the loaded route? Make
+                        Are you sure you want to clear the loaded route? Make
                         sure you have saved your latest changes.
                       </p>
                     </div>
@@ -81,7 +81,7 @@ const ConfirmReset: React.FC<ConfirmResetProps> = ({ open, setOpen }) => {
                       setOpen(false);
                     }}
                   >
-                    Reset
+                    Clear
                   </button>
                   <button
                     type="button"

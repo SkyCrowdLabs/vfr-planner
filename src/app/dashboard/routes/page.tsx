@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { Route } from "@/types";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
+import toast from "react-hot-toast";
 
 interface RouteProps {}
 
@@ -20,6 +21,7 @@ const Routes: NextPage<RouteProps> = () => {
   const [count, setCount] = useState(0);
 
   const loadRoute = useRouteStore((state) => state.loadRoute);
+  const setIsMapBusy = useRouteStore((state) => state.setIsMapBusy);
   const isModified = useRouteStore((state) => state.isModified);
 
   const { data: routesResponse, error } = useSWR<{
@@ -33,6 +35,7 @@ const Routes: NextPage<RouteProps> = () => {
 
   const onClickRoute = async (id: string) => {
     setSelectedRouteId(id);
+    setIsMapBusy(true);
   };
   const handleNext = () => {
     const nextPage = selectedPage + 1;
@@ -53,8 +56,12 @@ const Routes: NextPage<RouteProps> = () => {
     setCount(routesResponse?.count || 0);
   }, [routesResponse]);
   useEffect(() => {
-    if (selectedRoute) loadRoute(selectedRoute.data);
-  }, [loadRoute, selectedRoute]);
+    if (selectedRoute) {
+      loadRoute(selectedRoute.data);
+      setIsMapBusy(false);
+      toast.success("Route successfully loaded");
+    }
+  }, [loadRoute, selectedRoute, setIsMapBusy]);
 
   return (
     <div className="flex grow flex-row justify-center md:mt-8 mt-4">

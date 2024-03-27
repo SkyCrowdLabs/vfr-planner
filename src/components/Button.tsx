@@ -5,14 +5,19 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ isLoading, children, ...props }) => {
+const Button: React.FC<ButtonProps> = ({
+  isLoading,
+  children,
+  disabled,
+  ...props
+}) => {
   return (
     <button
       {...props}
       className={clsx(
         "flex w-full justify-center items-center rounded-md  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
-        isLoading
-          ? "bg-gray-500 cursor-not-allowed"
+        isLoading || disabled
+          ? "bg-gray-500 cursor-not-allowed pointer-events-none"
           : "bg-indigo-600 hover:bg-indigo-500"
       )}
     >
