@@ -6,6 +6,7 @@ import Navigation from "@/app/dashboard/Navigation";
 import { NextPage } from "next";
 import { createClient } from "@/utils/supabase/client";
 import { AuthContext, UserProfile } from "@/context/AuthContext";
+import Notification from "@/components/Notification";
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -48,6 +49,7 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
 
           <main className="flex grow z-0 bg-white">{children}</main>
         </div>
+        <Notification />
       </div>
     </AuthContext.Provider>
   );
