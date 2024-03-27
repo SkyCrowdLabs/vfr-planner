@@ -28,6 +28,7 @@ const RouteBuilder: NextPage = () => {
   const editRoute = useRouteStore((state) => state.editRoute);
   const error = useRouteStore((state) => state.error);
   const isLoading = useRouteStore((state) => state.isLoading);
+  const isMapBusy = useRouteStore((state) => state.isMapBusy);
   const waypoints = useRouteStore((state) => state.waypoints);
   const routeId = useRouteStore((state) => state.id);
 
@@ -41,7 +42,13 @@ const RouteBuilder: NextPage = () => {
     <div className="w-full h-full flex flex-col md:flex-row">
       <div
         className={clsx(
-          "grow md:h-[calc(100vh-4rem)] md:max-h-none md:min-h-none max-h-[80%] min-h-[80%]"
+          {
+            "grow md:h-[calc(100vh-4rem)] md:max-h-none md:min-h-none max-h-[80%] min-h-[80%]":
+              true,
+          },
+          {
+            "opacity-70 pointer-events-none": isMapBusy,
+          }
         )}
       >
         <Map position={initPos} zoom={7} />

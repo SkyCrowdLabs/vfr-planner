@@ -18,7 +18,8 @@ const Enroute: React.FC<EnrouteProps> = () => {
     return [...acc, [latlng, waypoints[i - 1].latlng]];
   }, [] as { lat: number; lng: number }[][]);
   const addWaypoint = useRouteStore((state) => state.addWaypoint);
-  const { data } = useSWR<GeocodingResponse>(
+  const setIsMapBusy = useRouteStore((state) => state.setIsMapBusy);
+  const { data, isLoading } = useSWR<GeocodingResponse>(
     latlng ? `/geocoding?lat=${latlng.lat}&lng=${latlng.lng}` : null,
     fetcher
   );
@@ -38,6 +39,9 @@ const Enroute: React.FC<EnrouteProps> = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+  useEffect(() => {
+    setIsMapBusy(isLoading);
+  }, [isLoading, setIsMapBusy]);
 
   const eventHandlers = useMemo(
     () => ({

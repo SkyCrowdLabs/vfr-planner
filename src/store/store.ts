@@ -7,12 +7,14 @@ import { persist } from "zustand/middleware";
 interface RouteState extends Route {
   isModified: boolean;
   isLoading: boolean;
+  isMapBusy: boolean;
   error?: string;
   initializeRoute: (departure: Airport, destination: Airport) => void;
   addWaypoint: (waypoint: Waypoint, i: number) => void;
   editWaypoint: (id: string, waypoint: Waypoint) => void;
   removeWaypoint: (id: string) => void;
   saveRoute: () => Promise<void>;
+  setIsMapBusy: (s: boolean) => void;
   editRoute: () => Promise<void>;
   loadRoute: (route: Route) => void;
   resetRoute: () => void;
@@ -26,6 +28,7 @@ const initialRouteState = {
   waypoints: [],
   isLoading: false,
   isModified: false,
+  isMapBusy: false,
   error: undefined,
 };
 
@@ -193,6 +196,7 @@ export const useRouteStore = create<RouteState>()(
         }));
       },
       resetRoute: () => set((state) => ({ ...state, ...initialRouteState })),
+      setIsMapBusy: (s) => set((state) => ({ ...state, isMapBusy: s })),
     }),
     {
       name: "route-storage",
