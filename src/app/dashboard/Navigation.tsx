@@ -85,11 +85,11 @@ const Navigation: React.FC<NavigationProps> = ({
                 <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                   {userNavigation.map((item) => (
                     <Menu.Item key={item.name}>
-                      {({ active }) => (
+                      {({ focus }) => (
                         <a
                           href={item.href}
                           className={clsx(
-                            active ? "bg-gray-50" : "",
+                            focus ? "bg-gray-50" : "",
                             "block px-3 py-1 text-sm leading-6 text-gray-900"
                           )}
                         >
