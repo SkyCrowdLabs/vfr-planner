@@ -14,9 +14,6 @@ const Home: NextPage = () => {
       <div>
         <Button onClick={openNewRoute}>Create a route</Button>
       </div>
-      <div className="ml-4">
-        <Button onClick={() => toast("hello")}>Create a toast</Button>
-      </div>
       <NewRoute open={isNewRouteOpen} setOpen={setIsNewRouteOpen} />
     </div>
   );

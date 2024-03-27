@@ -7,6 +7,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { Airport } from "@/types";
 import { useRouteStore } from "@/store/store";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface NewRouteProps {
   open: boolean;
@@ -40,6 +41,9 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
     if (!departure || !arrival) return;
     initializeRoute(departure, arrival);
     router.push("/dashboard/map");
+    toast.success("New route has been created!", {
+      id: `success-${departure.name}-${arrival.name}`,
+    });
     setOpen(false);
   };
 
