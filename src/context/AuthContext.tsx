@@ -1,3 +1,4 @@
+"use client";
 import { PostgrestSingleResponse, User } from "@supabase/supabase-js";
 import { createContext } from "react";
 
@@ -13,4 +14,20 @@ export interface UserProfile {
   }>;
 }
 
+interface AuthProviderProps {
+  children: React.ReactNode;
+  userProfile: UserProfile | undefined;
+}
+
 export const AuthContext = createContext<UserProfile | undefined>(undefined);
+
+const AuthProvider: React.FC<AuthProviderProps> = ({
+  children,
+  userProfile,
+}) => {
+  return (
+    <AuthContext.Provider value={userProfile}>{children}</AuthContext.Provider>
+  );
+};
+
+export default AuthProvider;

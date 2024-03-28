@@ -2,9 +2,9 @@
 import { useState } from "react";
 import Sidebar from "@/app/dashboard/Sidebar";
 import Navigation from "@/app/dashboard/Navigation";
-import { AuthContext, UserProfile } from "@/context/AuthContext";
+import AuthProvider, { UserProfile } from "@/context/AuthContext";
 import Notification from "@/components/Notification";
-import { DialogContext } from "@/context/DialogContext";
+import DialogProvider from "@/context/DialogContext";
 import NewRoute from "../../components/NewRouteDialog";
 import ConfirmReset from "../../components/ConfirmResetDialog";
 
@@ -22,9 +22,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [confirmResetVisible, setConfirmResetVisible] = useState(false);
 
   return (
-    <AuthContext.Provider value={userProfile}>
-      <DialogContext.Provider
-        value={{
+    <AuthProvider userProfile={userProfile}>
+      <DialogProvider
+        state={{
           createNewRouteVisible,
           setCreateNewRouteVisible,
           confirmResetVisible,
@@ -52,8 +52,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             setOpen={setConfirmResetVisible}
           />
         </div>
-      </DialogContext.Provider>
-    </AuthContext.Provider>
+      </DialogProvider>
+    </AuthProvider>
   );
 };
 
