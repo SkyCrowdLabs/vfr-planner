@@ -4,8 +4,10 @@ import { MapPinIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { NextPage } from "next";
 import { DialogContext } from "@/context/DialogContext";
 import clsx from "clsx";
+import { AuthContext } from "@/context/AuthContext";
 
 const Home: NextPage = () => {
+  const auth = useContext(AuthContext);
   const { setCreateNewRouteVisible } = useContext(DialogContext);
   const items = [
     {
@@ -71,6 +73,17 @@ const Home: NextPage = () => {
             </li>
           ))}
         </ul>
+        {!auth && (
+          <div className="mt-4 flex">
+            <a
+              href="#"
+              className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Or sign in to your account
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
