@@ -6,13 +6,11 @@ import { fetcher } from "@/utils/fetcher";
 import Pagination from "@/components/Pagination";
 import { format } from "date-fns";
 import { Aircraft } from "@/types";
-import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
-import toast from "react-hot-toast";
 
 interface AircraftProps {}
 
-const Aircraft: NextPage<AircraftProps> = () => {
+const AircraftPage: NextPage<AircraftProps> = () => {
   const [offset, setOffset] = useState(0);
   const [selectedPage, setSelectedPage] = useState(1);
   const [count, setCount] = useState(0);
@@ -143,4 +141,4 @@ const Aircraft: NextPage<AircraftProps> = () => {
   );
 };
 
-export default Aircraft;
+export default AircraftPage;
