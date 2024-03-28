@@ -1,12 +1,18 @@
 "use client";
 import React, { useContext } from "react";
-import { MapPinIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import {
+  MapPinIcon,
+  PaperAirplaneIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 import { NextPage } from "next";
 import { DialogContext } from "@/context/DialogContext";
 import clsx from "clsx";
 import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const auth = useContext(AuthContext);
   const { setCreateNewRouteVisible } = useContext(DialogContext);
   const items = [
@@ -17,13 +23,27 @@ const Home: NextPage = () => {
       background: "bg-pink-500",
       handleClick: () => setCreateNewRouteVisible(true),
     },
-    {
-      title: "Create an Aircraft",
-      description: "Let us now the aircraft that you will use.",
-      icon: PaperAirplaneIcon,
-      background: "bg-yellow-500",
-      handleClick: () => {},
-    },
+    ...(auth
+      ? [
+          {
+            title: "Create an Aircraft",
+            description: "Let us now the aircraft that you will use.",
+            icon: PaperAirplaneIcon,
+            background: "bg-yellow-500",
+            handleClick: () => {},
+          },
+        ]
+      : [
+          {
+            title: "Sign in to your account",
+            description: "Save your routes and aircraft.",
+            icon: UserCircleIcon,
+            background: "bg-red-500",
+            handleClick: () => {
+              router.push("/login");
+            },
+          },
+        ]),
   ];
 
   return (
@@ -76,10 +96,10 @@ const Home: NextPage = () => {
         {!auth && (
           <div className="mt-4 flex">
             <a
-              href="#"
+              href="/signup"
               className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
             >
-              Or sign in to your account
+              Or create an account
               <span aria-hidden="true"> &rarr;</span>
             </a>
           </div>
