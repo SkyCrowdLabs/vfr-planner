@@ -1,7 +1,24 @@
+"use client";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { signup } from "../login/actions";
 import Image from "next/image";
+import Button from "@/components/Button";
 
-export default function Login() {
+export interface SignupInput {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export default function Signup() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting, errors },
+  } = useForm<SignupInput>();
+  const onSubmit: SubmitHandler<SignupInput> = (data) => signup(data);
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -19,7 +36,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
                 htmlFor="email"
@@ -29,6 +46,7 @@ export default function Login() {
               </label>
               <div className="mt-2">
                 <input
+                  {...register("email")}
                   id="email"
                   name="email"
                   type="email"
@@ -50,6 +68,7 @@ export default function Login() {
               </div>
               <div className="mt-2">
                 <input
+                  {...register("password")}
                   id="password"
                   name="password"
                   type="password"
@@ -70,8 +89,16 @@ export default function Login() {
               </div>
               <div className="mt-2">
                 <input
-                  id="password"
-                  name="password"
+                  {...register("confirmPassword", {
+                    required: true,
+                    validate: (val: string) => {
+                      if (watch("password") != val) {
+                        return "Your passwords do no match";
+                      }
+                    },
+                  })}
+                  id="confirmPassword"
+                  name="confirmPassword"
                   type="password"
                   autoComplete="current-password"
                   required
@@ -81,12 +108,9 @@ export default function Login() {
             </div>
 
             <div>
-              <button
-                formAction={signup}
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign up
-              </button>
+              <Button isLoading={isSubmitting}>
+                <input type="submit" />
+              </Button>
             </div>
           </form>
 
