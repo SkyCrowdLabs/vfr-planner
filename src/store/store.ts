@@ -56,6 +56,7 @@ export const useRouteStore = create<RouteState>()(
           };
           return {
             ...state,
+            id: undefined,
             departure,
             destination,
             waypoints: [
