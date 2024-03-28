@@ -165,7 +165,9 @@ const Routes: NextPage<RouteProps> = () => {
                   </tbody>
                 </table>
                 <Pagination
-                  indexStart={offset + 1}
+                  indexStart={
+                    routesResponse?.data?.length || 0 ? offset + 1 : 0
+                  }
                   indexEnd={offset + (routesResponse?.data?.length || 0)}
                   count={count}
                   onClickNext={handleNext}

@@ -124,7 +124,9 @@ const AircraftPage: NextPage<AircraftProps> = () => {
                   </tbody>
                 </table>
                 <Pagination
-                  indexStart={offset + 1}
+                  indexStart={
+                    aircraftResponse?.data?.length || 0 ? offset + 1 : 0
+                  }
                   indexEnd={offset + (aircraftResponse?.data?.length || 0)}
                   count={count}
                   onClickNext={handleNext}
