@@ -54,6 +54,7 @@ const Enroute: React.FC<EnrouteProps> = () => {
   );
   return linePositions.map((linePosition) => (
     <Polyline
+      weight={6}
       color={randomColor()}
       key={`route-${linePosition[0].lat.toFixed(2)}`}
       eventHandlers={eventHandlers}
