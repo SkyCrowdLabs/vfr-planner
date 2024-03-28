@@ -1,13 +1,7 @@
 import { signout } from "@/app/login/actions";
 import { UserProfile } from "@/context/AuthContext";
 import { Menu, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  BellIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/outline";
-import clsx from "clsx";
-import Image from "next/image";
+import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 
 interface NavigationProps {

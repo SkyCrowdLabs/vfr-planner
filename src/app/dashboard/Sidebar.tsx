@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                   <div className="flex h-16 shrink-0 items-center">
-                    <Link href={"/dashboard"}>
+                    <Link href={"/"}>
                       <Image
                         src="/favicon-32x32.png"
                         alt="airplane emoji"
@@ -167,7 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
           <div className="flex h-16 shrink-0 items-center">
-            <Link href="/dashboard">
+            <Link href="/">
               <Image
                 src="/favicon-32x32.png"
                 alt="airplane emoji"
