@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import Pagination from "@/components/Pagination";
@@ -9,6 +9,7 @@ import { Route } from "@/types";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
 import toast from "react-hot-toast";
+import { DialogContext } from "@/context/DialogContext";
 
 interface RouteProps {}
 
@@ -18,6 +19,7 @@ const Routes: NextPage<RouteProps> = () => {
   const [selectedRouteId, setSelectedRouteId] = useState<string | undefined>(
     undefined
   );
+  const { setCreateNewRouteVisible } = useContext(DialogContext);
   const [count, setCount] = useState(0);
 
   const loadRoute = useRouteStore((state) => state.loadRoute);
@@ -78,6 +80,9 @@ const Routes: NextPage<RouteProps> = () => {
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <button
+              onClick={() => {
+                setCreateNewRouteVisible(true);
+              }}
               type="button"
               className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >

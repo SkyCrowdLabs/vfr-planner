@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import WaypointList from "@/app/dashboard/map/WaypointList";
 import clsx from "clsx";
 import Button from "@/components/Button";
@@ -9,7 +9,7 @@ import Spinner from "@/components/Spinner";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
 import toast from "react-hot-toast";
-import ConfirmReset from "./ConfirmReset";
+import { DialogContext } from "@/context/DialogContext";
 
 const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
@@ -32,7 +32,7 @@ const RouteBuilder: NextPage = () => {
   const isModified = useRouteStore((state) => state.isModified);
   const waypoints = useRouteStore((state) => state.waypoints);
   const routeId = useRouteStore((state) => state.id);
-  const [showConfirmReset, setShowConfirmReset] = useState(false);
+  const { setConfirmResetVisible } = useContext(DialogContext);
 
   const handleSave = async () => {
     await saveRoute();
@@ -52,7 +52,7 @@ const RouteBuilder: NextPage = () => {
     toast.success("Route has been updated");
   };
   const handleReset = async () => {
-    setShowConfirmReset(true);
+    setConfirmResetVisible(true);
   };
 
   return (
@@ -107,7 +107,6 @@ const RouteBuilder: NextPage = () => {
           )}
         </div>
       </div>
-      <ConfirmReset open={showConfirmReset} setOpen={setShowConfirmReset} />
     </div>
   );
 };

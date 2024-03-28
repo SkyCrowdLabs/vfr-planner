@@ -7,6 +7,9 @@ import { NextPage } from "next";
 import { createClient } from "@/utils/supabase/client";
 import { AuthContext, UserProfile } from "@/context/AuthContext";
 import Notification from "@/components/Notification";
+import { DialogContext } from "@/context/DialogContext";
+import NewRoute from "../../components/NewRouteDialog";
+import ConfirmReset from "../../components/ConfirmResetDialog";
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -18,6 +21,8 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const supabase = createClient();
+  const [createNewRouteVisible, setCreateNewRouteVisible] = useState(false);
+  const [confirmResetVisible, setConfirmResetVisible] = useState(false);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -38,19 +43,36 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider value={userProfile}>
-      <div>
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <DialogContext.Provider
+        value={{
+          createNewRouteVisible,
+          setCreateNewRouteVisible,
+          confirmResetVisible,
+          setConfirmResetVisible,
+        }}
+      >
+        <div>
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
-          <Navigation
-            setSidebarOpen={setSidebarOpen}
-            userProfile={userProfile}
+          <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
+            <Navigation
+              setSidebarOpen={setSidebarOpen}
+              userProfile={userProfile}
+            />
+
+            <main className="flex grow z-0 bg-white">{children}</main>
+          </div>
+          <Notification />
+          <NewRoute
+            open={createNewRouteVisible}
+            setOpen={setCreateNewRouteVisible}
           />
-
-          <main className="flex grow z-0 bg-white">{children}</main>
+          <ConfirmReset
+            open={confirmResetVisible}
+            setOpen={setConfirmResetVisible}
+          />
         </div>
-        <Notification />
-      </div>
+      </DialogContext.Provider>
     </AuthContext.Provider>
   );
 };
