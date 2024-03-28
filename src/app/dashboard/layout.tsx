@@ -8,7 +8,6 @@ interface DashboardProps {
 }
 
 const getUserProfile = async (): Promise<UserProfile | undefined> => {
-  await new Promise((resolve) => setTimeout(resolve, 10000));
   const supabase = createClient();
   const { error, data } = await supabase.auth.getUser();
   if (error || !data) return undefined;

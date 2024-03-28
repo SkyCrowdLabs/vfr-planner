@@ -45,8 +45,8 @@ export interface GeocodingResponse {
 }
 
 export interface Route {
-  id?: string | undefined;
-  name?: string | undefined;
+  id?: number | undefined | null;
+  name?: string | undefined | null;
   departure?: Airport | undefined;
   destination?: Airport | undefined;
   waypoints: Waypoint[];

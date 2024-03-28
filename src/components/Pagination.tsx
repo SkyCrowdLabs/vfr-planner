@@ -44,6 +44,9 @@ const Pagination: React.FC<PaginationProps> = ({
   onClickPage,
   selectedPage,
 }) => {
+  const disabledNext = selectedPage * 10 > count;
+  const disabledPrev = selectedPage === 1;
+
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-0">
       <div className="flex flex-1 justify-between sm:hidden">
@@ -75,7 +78,11 @@ const Pagination: React.FC<PaginationProps> = ({
           >
             <button
               onClick={onClickPrev}
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+              className={clsx({
+                "relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0":
+                  true,
+                "bg-gray-200 pointer-events-none": disabledPrev,
+              })}
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -100,7 +107,11 @@ const Pagination: React.FC<PaginationProps> = ({
             )}
             <button
               onClick={onClickNext}
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+              className={clsx({
+                "relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0":
+                  true,
+                "bg-gray-200  pointer-events-none": disabledNext,
+              })}
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
