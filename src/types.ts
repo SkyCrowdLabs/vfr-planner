@@ -52,3 +52,29 @@ export interface Route {
   waypoints: Waypoint[];
   created_at?: string;
 }
+
+export interface Aircraft {
+  bew: number | null;
+  bew_cg: number | null;
+  cg_limit_aft: number | null;
+  cg_limit_fwd: number | null;
+  climb_ff: number | null;
+  climb_ias: number | null;
+  climb_vs: number | null;
+  created_at: string;
+  cruise_ff: number | null;
+  cruise_ias: number | null;
+  descent_ff: number | null;
+  descent_ias: number | null;
+  descent_vs: number | null;
+  engine: string | null;
+  engine_hp: number | null;
+  equipment: string | null;
+  id: string;
+  manufacturer: string | null;
+  model: string | null;
+  tail_num: string | null;
+  transponder: string | null;
+  type: string | null;
+  user_id: string | null;
+}

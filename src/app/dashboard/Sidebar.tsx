@@ -6,6 +6,7 @@ import {
   HomeIcon,
   MapIcon,
   MapPinIcon,
+  PaperAirplaneIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
@@ -37,11 +38,11 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
       href: "/dashboard/routes",
       icon: MapPinIcon,
     },
-    // {
-    //   name: "Aircraft",
-    //   href: "/dashboard/aircraft",
-    //   icon: PaperAirplaneIcon,
-    // },
+    {
+      name: "Aircraft",
+      href: "/dashboard/aircraft",
+      icon: PaperAirplaneIcon,
+    },
     // {
     //   name: "Flights",
     //   href: "/dashboard/flights",

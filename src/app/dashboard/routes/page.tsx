@@ -95,7 +95,7 @@ const Routes: NextPage<RouteProps> = () => {
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4  pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        className="py-3.5 pl-4  pr-3 text-left text-sm font-semibold text-gray-900"
                       >
                         Name
                       </th>
@@ -117,12 +117,6 @@ const Routes: NextPage<RouteProps> = () => {
                       >
                         Created at
                       </th>
-                      <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                      >
-                        <span className="sr-only">Edit</span>
-                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
@@ -135,7 +129,7 @@ const Routes: NextPage<RouteProps> = () => {
                           }}
                           key={route.id}
                         >
-                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none">
                             {route.name || "Unnamed route"}
                             <dl className="font-normal lg:hidden">
                               <dt className="sr-only">Departure</dt>
@@ -160,15 +154,6 @@ const Routes: NextPage<RouteProps> = () => {
                           <td className="px-3 py-4 text-sm text-gray-500 min-w-48 sm:min-w-0">
                             {route.created_at &&
                               format(route.created_at, "HH:mm dd-MMM-yyyy")}
-                          </td>
-                          <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                              <span className="sr-only">, {route.name}</span>
-                            </a>
                           </td>
                         </tr>
                       ))}

@@ -9,6 +9,92 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      aircraft: {
+        Row: {
+          bew: number | null;
+          bew_cg: number | null;
+          cg_limit_aft: number | null;
+          cg_limit_fwd: number | null;
+          climb_ff: number | null;
+          climb_ias: number | null;
+          climb_vs: number | null;
+          created_at: string;
+          cruise_ff: number | null;
+          cruise_ias: number | null;
+          descent_ff: number | null;
+          descent_ias: number | null;
+          descent_vs: number | null;
+          engine: string | null;
+          engine_hp: number | null;
+          equipment: string | null;
+          id: string;
+          manufacturer: string | null;
+          model: string | null;
+          tail_num: string | null;
+          transponder: string | null;
+          type: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          bew?: number | null;
+          bew_cg?: number | null;
+          cg_limit_aft?: number | null;
+          cg_limit_fwd?: number | null;
+          climb_ff?: number | null;
+          climb_ias?: number | null;
+          climb_vs?: number | null;
+          created_at?: string;
+          cruise_ff?: number | null;
+          cruise_ias?: number | null;
+          descent_ff?: number | null;
+          descent_ias?: number | null;
+          descent_vs?: number | null;
+          engine?: string | null;
+          engine_hp?: number | null;
+          equipment?: string | null;
+          id?: string;
+          manufacturer?: string | null;
+          model?: string | null;
+          tail_num?: string | null;
+          transponder?: string | null;
+          type?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          bew?: number | null;
+          bew_cg?: number | null;
+          cg_limit_aft?: number | null;
+          cg_limit_fwd?: number | null;
+          climb_ff?: number | null;
+          climb_ias?: number | null;
+          climb_vs?: number | null;
+          created_at?: string;
+          cruise_ff?: number | null;
+          cruise_ias?: number | null;
+          descent_ff?: number | null;
+          descent_ias?: number | null;
+          descent_vs?: number | null;
+          engine?: string | null;
+          engine_hp?: number | null;
+          equipment?: string | null;
+          id?: string;
+          manufacturer?: string | null;
+          model?: string | null;
+          tail_num?: string | null;
+          transponder?: string | null;
+          type?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_aircraft_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       "airport-frequencies": {
         Row: {
           airport_ident: string | null;
@@ -64,6 +150,7 @@ export type Database = {
           scheduled_service: string | null;
           type: string | null;
           wikipedia_link: string | null;
+          ident_name: string | null;
         };
         Insert: {
           continent?: string | null;
@@ -256,7 +343,12 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      ident_name: {
+        Args: {
+          "": unknown;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       [_ in never]: never;
