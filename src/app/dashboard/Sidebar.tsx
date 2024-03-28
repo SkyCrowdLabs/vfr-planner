@@ -2,7 +2,6 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  Cog6ToothIcon,
   HomeIcon,
   MapIcon,
   MapPinIcon,
