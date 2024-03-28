@@ -29,9 +29,9 @@ const getAircraft = async (): Promise<{
   };
 };
 
-const Aircraft: NextPage = async () => {
+const AircraftPage: NextPage = async () => {
   const { aircraft, count } = await getAircraft();
   return <AircraftTable aircraft={aircraft} count={count} />;
 };
 
-export default Aircraft;
+export default AircraftPage;
