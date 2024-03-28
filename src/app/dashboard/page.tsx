@@ -10,6 +10,7 @@ import { DialogContext } from "@/context/DialogContext";
 import clsx from "clsx";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -30,7 +31,9 @@ const Home: NextPage = () => {
             description: "Let us now the aircraft that you will use.",
             icon: PaperAirplaneIcon,
             background: "bg-yellow-500",
-            handleClick: () => {},
+            handleClick: () => {
+              toast.custom("Feature is not yet implemented");
+            },
           },
         ]
       : [

@@ -1,8 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Transition } from "@headlessui/react";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  InformationCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/20/solid";
-import { useToaster, toast, resolveValue, ToastOptions } from "react-hot-toast";
+import { useToaster, toast, resolveValue } from "react-hot-toast";
 
 const Notification = () => {
   const { toasts, handlers } = useToaster();
@@ -47,6 +51,12 @@ const Notification = () => {
                       {["error"].includes(t.type) && (
                         <XCircleIcon
                           className="h-6 w-6 text-red-400"
+                          aria-hidden="true"
+                        />
+                      )}
+                      {["custom"].includes(t.type) && (
+                        <InformationCircleIcon
+                          className="h-6 w-6 text-gray-400"
                           aria-hidden="true"
                         />
                       )}

@@ -9,6 +9,7 @@ import { Aircraft } from "@/types";
 import { NextPage } from "next";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import toast from "react-hot-toast";
 
 interface AircraftProps {}
 
@@ -157,6 +158,9 @@ const AircraftPage: NextPage<AircraftProps> = () => {
               </p>
               <div className="mt-6">
                 <button
+                  onClick={() => {
+                    toast.custom("Feature is not yet implemented");
+                  }}
                   type="button"
                   className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
