@@ -100,7 +100,7 @@ const Routes: NextPage<RouteProps> = () => {
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4  pr-3 text-left text-sm font-semibold text-gray-900"
+                        className="py-3.5 pl-6 sm:pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
                       >
                         Name
                       </th>
@@ -134,7 +134,7 @@ const Routes: NextPage<RouteProps> = () => {
                           }}
                           key={route.id}
                         >
-                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none">
+                          <td className="w-full max-w-0 py-4 pl-6 sm:pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none">
                             {route.name || "Unnamed route"}
                             <dl className="font-normal lg:hidden">
                               <dt className="sr-only">Departure</dt>

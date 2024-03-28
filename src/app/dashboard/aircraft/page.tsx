@@ -69,7 +69,7 @@ const AircraftPage: NextPage<AircraftProps> = () => {
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4  pr-3 text-left text-sm font-semibold text-gray-900 "
+                        className="py-3.5 pl-6 sm:pl-4 pr-3 text-left text-sm font-semibold text-gray-900 "
                       >
                         Tail number
                       </th>
@@ -100,7 +100,7 @@ const AircraftPage: NextPage<AircraftProps> = () => {
                           className="cursor-pointer hover:bg-gray-200"
                           key={aircraft.id}
                         >
-                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none ">
+                          <td className="w-full max-w-0 py-4 pl-6 sm:pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none ">
                             {aircraft.tail_num}
                             <dl className="font-normal lg:hidden">
                               <dt className="sr-only">Type</dt>
