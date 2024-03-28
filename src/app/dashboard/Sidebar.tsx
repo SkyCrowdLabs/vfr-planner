@@ -9,11 +9,12 @@ import {
   PaperAirplaneIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { AuthContext } from "@/context/AuthContext";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -22,6 +23,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
   const pathname = usePathname();
+  const auth = useContext(AuthContext);
   const navigation = [
     {
       name: "Home",
@@ -33,16 +35,20 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
       href: "/dashboard/map",
       icon: MapIcon,
     },
-    {
-      name: "Routes",
-      href: "/dashboard/routes",
-      icon: MapPinIcon,
-    },
-    {
-      name: "Aircraft",
-      href: "/dashboard/aircraft",
-      icon: PaperAirplaneIcon,
-    },
+    ...(auth
+      ? [
+          {
+            name: "Routes",
+            href: "/dashboard/routes",
+            icon: MapPinIcon,
+          },
+          {
+            name: "Aircraft",
+            href: "/dashboard/aircraft",
+            icon: PaperAirplaneIcon,
+          },
+        ]
+      : []),
     // {
     //   name: "Flights",
     //   href: "/dashboard/flights",

@@ -10,6 +10,8 @@ import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
 import toast from "react-hot-toast";
 import { DialogContext } from "@/context/DialogContext";
+import { AuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
@@ -23,6 +25,7 @@ const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
 });
 
 const RouteBuilder: NextPage = () => {
+  const auth = useContext(AuthContext);
   const initPos: LatLngExpression = [14.599512, 120.984222];
   const saveRoute = useRouteStore((state) => state.saveRoute);
   const editRoute = useRouteStore((state) => state.editRoute);
@@ -36,7 +39,10 @@ const RouteBuilder: NextPage = () => {
 
   const handleSave = async () => {
     await saveRoute();
-    if (error) toast.error("There has been a problem saving the route");
+    if (error) {
+      toast.error("There has been a problem saving the route");
+      return;
+    }
     toast.success("Route has been saved successfully!");
   };
   const handleUpdate = async () => {
@@ -75,25 +81,33 @@ const RouteBuilder: NextPage = () => {
           <WaypointList />
           {!!waypoints?.length ? (
             <>
-              <div>
-                {routeId ? (
-                  <Button
-                    isLoading={isLoading}
-                    disabled={!waypoints.length || !isModified}
-                    onClick={handleUpdate}
-                  >
-                    Update
-                  </Button>
-                ) : (
-                  <Button
-                    isLoading={isLoading}
-                    disabled={!waypoints.length}
-                    onClick={handleSave}
-                  >
-                    Save
-                  </Button>
-                )}
-              </div>
+              {auth?.user ? (
+                <div>
+                  {routeId ? (
+                    <Button
+                      isLoading={isLoading}
+                      disabled={!waypoints.length || !isModified}
+                      onClick={handleUpdate}
+                    >
+                      Update
+                    </Button>
+                  ) : (
+                    <Button
+                      isLoading={isLoading}
+                      disabled={!waypoints.length}
+                      onClick={handleSave}
+                    >
+                      Save
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <div className="flex justify-center items-center">
+                  <p className="text-gray-700 text-sm">
+                    <Link href="/login">Sign in</Link> to be able to save routes
+                  </p>
+                </div>
+              )}
               <div className="pb-5">
                 <Button disabled={!waypoints.length} onClick={handleReset}>
                   Clear
