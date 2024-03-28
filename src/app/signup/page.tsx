@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { signup } from "../login/actions";
 import Image from "next/image";
 import Button from "@/components/Button";
+import Link from "next/link";
 
 export interface SignupInput {
   email: string;
@@ -23,13 +24,15 @@ export default function Signup() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Image
-            src="/favicon-32x32.png"
-            alt="airplane emoji"
-            className="w-10 h-auto mx-auto"
-            width={40}
-            height={40}
-          />
+          <Link href="/">
+            <Image
+              src="/favicon-32x32.png"
+              alt="airplane emoji"
+              className="w-10 h-auto mx-auto"
+              width={40}
+              height={40}
+            />
+          </Link>
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Create an account
           </h2>

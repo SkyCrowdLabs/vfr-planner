@@ -13,7 +13,7 @@ const LandingNavigation = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <a href="/dashboard" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">VFR Planner</span>
             <Image
               src="/favicon-32x32.png"
