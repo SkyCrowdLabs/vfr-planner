@@ -181,7 +181,12 @@ const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
                     </table>
                     <Pagination
                       indexStart={offset + 1}
-                      indexEnd={offset + routes.length}
+                      indexEnd={
+                        offset +
+                        (initialState
+                          ? routes.length
+                          : routesResponse?.data?.length || 0)
+                      }
                       count={count}
                       onClickNext={handleNext}
                       onClickPrev={handlePrev}

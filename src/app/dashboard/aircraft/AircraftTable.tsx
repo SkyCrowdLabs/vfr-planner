@@ -142,7 +142,12 @@ const AircraftTable: NextPage<AircraftTableProps> = ({ aircraft, count }) => {
                     </table>
                     <Pagination
                       indexStart={offset + 1}
-                      indexEnd={offset + aircraft.length}
+                      indexEnd={
+                        offset +
+                        (initialState
+                          ? aircraft.length
+                          : aircraftResponse?.data?.length || 0)
+                      }
                       count={count}
                       onClickNext={handleNext}
                       onClickPrev={handlePrev}
