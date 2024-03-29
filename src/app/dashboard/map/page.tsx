@@ -43,7 +43,8 @@ const RouteBuilder: NextPage = () => {
   const selectedRouteId = useRouteStore((state) => state.selectedRouteId);
   const loadRoute = useRouteStore((state) => state.loadRoute);
   const routeId = useRouteStore((state) => state.id);
-  const { setConfirmResetVisible } = useContext(DialogContext);
+  const { setConfirmResetVisible, setCreateNewRouteVisible } =
+    useContext(DialogContext);
 
   const { data: routeResponse, isLoading: isLoadingRoute } = useSWR<{
     data: Route;
@@ -99,9 +100,9 @@ const RouteBuilder: NextPage = () => {
       </div>
       <div className="bg-white min-w-72 md:overflow-auto md:max-h-[calc(100vh-4rem)] px-5">
         <div className="w-full min-h-full flex flex-col justify-start gap-4">
-          <WaypointList />
           {!!waypoints?.length ? (
             <>
+              <WaypointList />
               {auth?.user ? (
                 <div>
                   {routeId ? (
@@ -136,8 +137,23 @@ const RouteBuilder: NextPage = () => {
               </div>
             </>
           ) : (
-            <div className="mt-5 pb-5 h-full flex justify-center items-center grow">
-              <p className="text-gray-700">There is no loaded route</p>
+            <div className="mt-5 pb-5 h-full flex flex-col justify-center items-center grow">
+              <h2 className="text-gray-700">There is no loaded route</h2>
+              <div>
+                <span
+                  onClick={() => {
+                    setCreateNewRouteVisible(true);
+                  }}
+                  className="text-blue-700 cursor-pointer"
+                >
+                  Create
+                </span>{" "}
+                or{" "}
+                <Link href="/dashboard/routes" className="text-blue-700">
+                  load
+                </Link>{" "}
+                a route
+              </div>
             </div>
           )}
         </div>

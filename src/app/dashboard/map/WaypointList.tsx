@@ -8,9 +8,13 @@ interface WaypointListProps {}
 
 const WaypointList: React.FC<WaypointListProps> = () => {
   const waypoints = useRouteStore((state) => state.waypoints);
+  const name = useRouteStore((state) => state.name);
   const removeWaypoint = useRouteStore((state) => state.removeWaypoint);
   return (
     <ul role="list" className="divide-y divide-gray-100">
+      <h2 className="text font-semibold leading-6 text-gray-900 mt-3 py-7">
+        {name}
+      </h2>
       {waypoints.map(({ id, name, distanceFromPrev, bearingFromPrev }, i) => {
         return (
           <li
