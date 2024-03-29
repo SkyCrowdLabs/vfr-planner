@@ -8,6 +8,7 @@ interface RouteState extends Route {
   isModified: boolean;
   isLoading: boolean;
   isMapBusy: boolean;
+  selectedNewRoute: boolean;
   error?: string;
   selectedRouteId?: number;
   initializeRoute: (
@@ -23,12 +24,14 @@ interface RouteState extends Route {
   editRoute: () => Promise<void>;
   loadRoute: (route: Route) => void;
   setSelectedRouteId: (id: number) => void;
+  setSelectedNewRoute: (id: boolean) => void;
   resetRoute: () => void;
 }
 
 const initialRouteState = {
   selectedRouteId: undefined,
   id: undefined,
+  selectedNewRoute: false,
   name: undefined,
   departure: undefined,
   destination: undefined,
@@ -208,6 +211,8 @@ export const useRouteStore = create<RouteState>()(
       },
       resetRoute: () => set((state) => ({ ...state, ...initialRouteState })),
       setIsMapBusy: (s) => set((state) => ({ ...state, isMapBusy: s })),
+      setSelectedNewRoute: (s) =>
+        set((state) => ({ ...state, selectedNewRoute: s })),
       setSelectedRouteId: (s) =>
         set((state) => ({ ...state, selectedRouteId: s })),
     }),

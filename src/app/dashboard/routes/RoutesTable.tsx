@@ -27,6 +27,9 @@ const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
   const [initialState, setInitialState] = useState(true);
 
   const setSelectedRouteId = useRouteStore((state) => state.setSelectedRouteId);
+  const setSelectedNewRoute = useRouteStore(
+    (state) => state.setSelectedNewRoute
+  );
   const selectedRouteId = useRouteStore((state) => state.selectedRouteId);
   const isModified = useRouteStore((state) => state.isModified);
 
@@ -37,6 +40,7 @@ const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
 
   const onClickRoute = async (id: number) => {
     setSelectedRouteId(id);
+    setSelectedNewRoute(true);
     router.push("/dashboard/map");
   };
   const handleNext = () => {

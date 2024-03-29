@@ -38,6 +38,10 @@ const RouteBuilder: NextPage = () => {
   const isLoading = useRouteStore((state) => state.isLoading);
   const isMapBusy = useRouteStore((state) => state.isMapBusy);
   const setIsMapBusy = useRouteStore((state) => state.setIsMapBusy);
+  const selectedNewRoute = useRouteStore((state) => state.selectedNewRoute);
+  const setSelectedNewRoute = useRouteStore(
+    (state) => state.setSelectedNewRoute
+  );
   const isModified = useRouteStore((state) => state.isModified);
   const waypoints = useRouteStore((state) => state.waypoints);
   const selectedRouteId = useRouteStore((state) => state.selectedRouteId);
@@ -48,12 +52,13 @@ const RouteBuilder: NextPage = () => {
 
   const { data: routeResponse, isLoading: isLoadingRoute } = useSWR<{
     data: Route;
-  }>(selectedRouteId ? `/routes/${selectedRouteId}` : null, fetcher);
+  }>(selectedNewRoute ? `/routes/${selectedRouteId}` : null, fetcher);
   useEffect(() => {
     if (routeResponse) {
       loadRoute(routeResponse.data);
+      setSelectedNewRoute(false);
     }
-  }, [loadRoute, routeResponse]);
+  }, [loadRoute, routeResponse, setSelectedNewRoute]);
   useEffect(() => {
     if (selectedRouteId) setIsMapBusy(isLoadingRoute);
   }, [isLoadingRoute, selectedRouteId, setIsMapBusy]);
