@@ -12,6 +12,7 @@ import { DialogContext } from "@/context/DialogContext";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { clsx } from "clsx";
 
 interface RoutesTableProps {
   routes: Route[];
@@ -26,6 +27,7 @@ const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
   const [initialState, setInitialState] = useState(true);
 
   const setSelectedRouteId = useRouteStore((state) => state.setSelectedRouteId);
+  const selectedRouteId = useRouteStore((state) => state.selectedRouteId);
   const isModified = useRouteStore((state) => state.isModified);
 
   const { data: routesResponse, error } = useSWR<{
@@ -126,7 +128,10 @@ const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
                           : routesResponse?.data || []
                         ).map((route) => (
                           <tr
-                            className="cursor-pointer hover:bg-gray-200"
+                            className={clsx(
+                              { "cursor-pointer hover:bg-gray-200": true },
+                              { "bg-blue-100": route.id === selectedRouteId }
+                            )}
                             onClick={() => {
                               if (route.id) onClickRoute(route.id);
                             }}
