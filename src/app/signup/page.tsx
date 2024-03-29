@@ -39,7 +39,16 @@ export default function Signup() {
   } = useForm<SignupInput>({ mode: "onBlur", resolver: yupResolver(schema) });
   const onSubmit: SubmitHandler<SignupInput> = async (data) => {
     const error = await signup(data);
-    if (error) toast.error(error);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    toast.success(
+      "Successful signup. Please check your inbox to confirm your email address.",
+      {
+        duration: 5000,
+      }
+    );
   };
 
   return (

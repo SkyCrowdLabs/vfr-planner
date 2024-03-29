@@ -32,7 +32,11 @@ export default function Login() {
   } = useForm<LoginInput>({ mode: "onBlur", resolver: yupResolver(schema) });
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     const error = await login(data);
-    if (error) toast.error(error);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    toast.success("Login success, welcome to VFR planner!", { duration: 5000 });
   };
 
   return (

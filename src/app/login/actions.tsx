@@ -25,7 +25,7 @@ export async function signup(data: SignupInput) {
     return error.message;
   }
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function signout() {
