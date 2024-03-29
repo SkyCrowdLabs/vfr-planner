@@ -10,7 +10,11 @@ interface RouteState extends Route {
   isMapBusy: boolean;
   error?: string;
   selectedRouteId?: number;
-  initializeRoute: (departure: Airport, destination: Airport) => void;
+  initializeRoute: (
+    name: string,
+    departure: Airport,
+    destination: Airport
+  ) => void;
   addWaypoint: (waypoint: Waypoint, i: number) => void;
   editWaypoint: (id: string, waypoint: Waypoint) => void;
   removeWaypoint: (id: string) => void;
@@ -39,7 +43,7 @@ export const useRouteStore = create<RouteState>()(
   persist(
     (set, get) => ({
       ...initialRouteState,
-      initializeRoute: (departure, destination) =>
+      initializeRoute: (name, departure, destination) =>
         set((state) => {
           const departureWaypoint = {
             id: `departure-${departure.ident}`,
@@ -59,6 +63,7 @@ export const useRouteStore = create<RouteState>()(
           };
           return {
             ...state,
+            name,
             selectedRouteId: undefined,
             id: undefined,
             departure,

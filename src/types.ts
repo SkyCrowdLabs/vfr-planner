@@ -1,5 +1,3 @@
-import { LatLng } from "leaflet";
-
 export interface Airport {
   continent: string | null;
   elevation_ft: string | null;
