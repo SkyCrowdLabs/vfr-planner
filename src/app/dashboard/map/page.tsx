@@ -15,7 +15,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { Route } from "@/types";
 import { fetcher } from "@/utils/fetcher";
-import { isMap } from "util/types";
+import { useRouter } from "next/navigation";
 
 const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
@@ -29,6 +29,7 @@ const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
 });
 
 const RouteBuilder: NextPage = () => {
+  const router = useRouter();
   const auth = useContext(AuthContext);
   const initPos: LatLngExpression = [14.599512, 120.984222];
   const saveRoute = useRouteStore((state) => state.saveRoute);
@@ -63,6 +64,7 @@ const RouteBuilder: NextPage = () => {
       return;
     }
     toast.success("Route has been saved successfully!");
+    router.refresh();
   };
   const handleUpdate = async () => {
     if (!isModified) {
