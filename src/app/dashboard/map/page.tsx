@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import WaypointList from "@/app/dashboard/map/WaypointList";
 import clsx from "clsx";
 import Button from "@/components/Button";
@@ -12,6 +12,10 @@ import toast from "react-hot-toast";
 import { DialogContext } from "@/context/DialogContext";
 import { AuthContext } from "@/context/AuthContext";
 import Link from "next/link";
+import useSWR from "swr";
+import { Route } from "@/types";
+import { fetcher } from "@/utils/fetcher";
+import { isMap } from "util/types";
 
 const Map = dynamic(() => import("@/app/dashboard/map/Map"), {
   loading: () => (
@@ -32,10 +36,25 @@ const RouteBuilder: NextPage = () => {
   const error = useRouteStore((state) => state.error);
   const isLoading = useRouteStore((state) => state.isLoading);
   const isMapBusy = useRouteStore((state) => state.isMapBusy);
+  const setIsMapBusy = useRouteStore((state) => state.setIsMapBusy);
   const isModified = useRouteStore((state) => state.isModified);
   const waypoints = useRouteStore((state) => state.waypoints);
+  const selectedRouteId = useRouteStore((state) => state.selectedRouteId);
+  const loadRoute = useRouteStore((state) => state.loadRoute);
   const routeId = useRouteStore((state) => state.id);
   const { setConfirmResetVisible } = useContext(DialogContext);
+
+  const { data: routeResponse, isLoading: isLoadingRoute } = useSWR<{
+    data: Route;
+  }>(selectedRouteId ? `/routes/${selectedRouteId}` : null, fetcher);
+  useEffect(() => {
+    if (routeResponse) {
+      loadRoute(routeResponse.data);
+    }
+  }, [loadRoute, routeResponse]);
+  useEffect(() => {
+    if (selectedRouteId) setIsMapBusy(isLoadingRoute);
+  }, [isLoadingRoute, selectedRouteId, setIsMapBusy]);
 
   const handleSave = async () => {
     await saveRoute();

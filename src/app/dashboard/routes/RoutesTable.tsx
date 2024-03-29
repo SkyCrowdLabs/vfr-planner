@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import Pagination from "@/components/Pagination";
@@ -8,10 +8,10 @@ import { format } from "date-fns";
 import { Route } from "@/types";
 import { useRouteStore } from "@/store/store";
 import { NextPage } from "next";
-import toast from "react-hot-toast";
 import { DialogContext } from "@/context/DialogContext";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { MapPinIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 interface RoutesTableProps {
   routes: Route[];
@@ -19,30 +19,23 @@ interface RoutesTableProps {
 }
 
 const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
+  const router = useRouter();
   const [offset, setOffset] = useState(0);
   const [selectedPage, setSelectedPage] = useState(1);
-  const [selectedRouteId, setSelectedRouteId] = useState<number | undefined>(
-    undefined
-  );
   const { setCreateNewRouteVisible } = useContext(DialogContext);
   const [initialState, setInitialState] = useState(true);
 
-  const loadRoute = useRouteStore((state) => state.loadRoute);
-  const setIsMapBusy = useRouteStore((state) => state.setIsMapBusy);
+  const setSelectedRouteId = useRouteStore((state) => state.setSelectedRouteId);
   const isModified = useRouteStore((state) => state.isModified);
 
   const { data: routesResponse, error } = useSWR<{
     data: Route[];
     count: number;
   }>(initialState ? null : `/routes?offset=${offset}&limit=10`, fetcher);
-  const { data: selectedRoute } = useSWR<{ data: Route }>(
-    selectedRouteId ? `/routes/${selectedRouteId}` : null,
-    fetcher
-  );
 
   const onClickRoute = async (id: number) => {
     setSelectedRouteId(id);
-    setIsMapBusy(true);
+    router.push("/dashboard/map");
   };
   const handleNext = () => {
     setInitialState(false);
@@ -65,14 +58,6 @@ const RoutesTable: NextPage<RoutesTableProps> = ({ routes, count }) => {
     setSelectedPage(n);
     setOffset((n - 1) * 10);
   };
-
-  useEffect(() => {
-    if (selectedRoute) {
-      loadRoute(selectedRoute.data);
-      setIsMapBusy(false);
-      toast.success("Route successfully loaded");
-    }
-  }, [loadRoute, selectedRoute, setIsMapBusy]);
 
   return (
     <div className="flex grow flex-row justify-center md:mt-8 mt-4">

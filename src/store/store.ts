@@ -9,6 +9,7 @@ interface RouteState extends Route {
   isLoading: boolean;
   isMapBusy: boolean;
   error?: string;
+  selectedRouteId?: number;
   initializeRoute: (departure: Airport, destination: Airport) => void;
   addWaypoint: (waypoint: Waypoint, i: number) => void;
   editWaypoint: (id: string, waypoint: Waypoint) => void;
@@ -17,10 +18,12 @@ interface RouteState extends Route {
   setIsMapBusy: (s: boolean) => void;
   editRoute: () => Promise<void>;
   loadRoute: (route: Route) => void;
+  setSelectedRouteId: (id: number) => void;
   resetRoute: () => void;
 }
 
 const initialRouteState = {
+  selectedRouteId: undefined,
   id: undefined,
   name: undefined,
   departure: undefined,
@@ -198,6 +201,8 @@ export const useRouteStore = create<RouteState>()(
       },
       resetRoute: () => set((state) => ({ ...state, ...initialRouteState })),
       setIsMapBusy: (s) => set((state) => ({ ...state, isMapBusy: s })),
+      setSelectedRouteId: (s) =>
+        set((state) => ({ ...state, selectedRouteId: s })),
     }),
     {
       name: "route-storage",

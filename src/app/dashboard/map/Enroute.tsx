@@ -53,8 +53,8 @@ const Enroute: React.FC<EnrouteProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   useEffect(() => {
-    setIsMapBusy(isLoading);
-  }, [isLoading, setIsMapBusy]);
+    if (latlng) setIsMapBusy(isLoading);
+  }, [isLoading, latlng, setIsMapBusy]);
 
   const eventHandlers = useMemo(
     () => ({
