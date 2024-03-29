@@ -5,7 +5,7 @@ import React from "react";
 const Loading: NextPage = () => {
   return (
     <div className="flex flex-col h-full items-center justify-center">
-      <Spinner />;
+      <Spinner />
     </div>
   );
 };
