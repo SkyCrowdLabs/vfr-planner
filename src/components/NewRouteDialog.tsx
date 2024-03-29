@@ -81,7 +81,6 @@ const NewRoute: React.FC<NewRouteProps> = ({ open, setOpen }) => {
 
   const {
     handleSubmit,
-    watch,
     register,
     control,
     formState: { errors },
