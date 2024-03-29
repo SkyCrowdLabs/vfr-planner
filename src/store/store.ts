@@ -59,6 +59,7 @@ export const useRouteStore = create<RouteState>()(
           };
           return {
             ...state,
+            selectedRouteId: undefined,
             id: undefined,
             departure,
             destination,
@@ -161,6 +162,7 @@ export const useRouteStore = create<RouteState>()(
         }
         set((state) => ({
           ...state,
+          selectedRouteId: data.data.id,
           isLoading: false,
           isModified: false,
           id: data.data.id,
