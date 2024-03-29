@@ -34,12 +34,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <div>
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-          <div className="lg:pl-72 flex flex-col min-h-screen h-screen justify-center">
+          <div className="lg:pl-72 flex min-h-screen flex-col justify-start">
             <Navigation
               setSidebarOpen={setSidebarOpen}
               userProfile={userProfile}
             />
-
             <main className="flex grow z-0 bg-white">{children}</main>
           </div>
           <Notification />

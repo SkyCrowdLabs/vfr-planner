@@ -52,13 +52,21 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className="flex flex-1 justify-between sm:hidden">
         <button
           onClick={onClickPrev}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className={clsx({
+            "relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50":
+              true,
+            "bg-gray-300 pointer-events-none": disabledPrev,
+          })}
         >
           Previous
         </button>
         <button
           onClick={onClickNext}
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className={clsx({
+            "relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50":
+              true,
+            "bg-gray-300 pointer-events-none": disabledNext,
+          })}
         >
           Next
         </button>

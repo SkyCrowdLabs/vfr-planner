@@ -50,7 +50,7 @@ const Home: NextPage = () => {
   ];
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="flex grow items-center justify-center">
       <div className="md:mb-16 mx-8">
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           Flight plans

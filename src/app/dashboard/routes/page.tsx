@@ -4,8 +4,10 @@ import { NextPage } from "next";
 import RoutesTable from "./RoutesTable";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { sleep } from "@/utils/sleep";
 
 const getRoutes = async (): Promise<{ routes: Route[]; count: number }> => {
+  // await sleep(10000);
   const supabase = createClient();
   const userRes = await supabase.auth.getUser();
 
