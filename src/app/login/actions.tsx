@@ -22,8 +22,7 @@ export async function signup(data: SignupInput) {
 
   const { error } = await supabase.auth.signUp(data);
   if (error) {
-    console.error(error);
-    redirect("/error");
+    return error.message;
   }
   revalidatePath("/", "layout");
   redirect("/");

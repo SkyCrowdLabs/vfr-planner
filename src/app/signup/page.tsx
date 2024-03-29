@@ -4,6 +4,10 @@ import { signup } from "../login/actions";
 import Image from "next/image";
 import Button from "@/components/Button";
 import Link from "next/link";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import toast, { Toaster } from "react-hot-toast";
+import clsx from "clsx";
 
 export interface SignupInput {
   email: string;
@@ -11,14 +15,32 @@ export interface SignupInput {
   confirmPassword: string;
 }
 
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email("Must be a valid email")
+      .required("Email is required"),
+    password: yup.string().required("Password is required"),
+    confirmPassword: yup
+      .string()
+      .test("passwords-match", "Passwords must match", function (value) {
+        return this.parent.password === value;
+      })
+      .required(),
+  })
+  .required();
+
 export default function Signup() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { isSubmitting, errors },
-  } = useForm<SignupInput>();
-  const onSubmit: SubmitHandler<SignupInput> = (data) => signup(data);
+  } = useForm<SignupInput>({ mode: "onBlur", resolver: yupResolver(schema) });
+  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
+    const error = await signup(data);
+    if (error) toast.error(error);
+  };
 
   return (
     <>
@@ -50,14 +72,19 @@ export default function Signup() {
               <div className="mt-2">
                 <input
                   {...register("email")}
-                  id="email"
-                  name="email"
-                  type="email"
                   autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className={clsx({
+                    "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                      true,
+                    "ring-red-400": errors.email,
+                  })}
                 />
               </div>
+              {errors.email && (
+                <p className="mt-1 ml-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -72,14 +99,20 @@ export default function Signup() {
               <div className="mt-2">
                 <input
                   {...register("password")}
-                  id="password"
-                  name="password"
                   type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  autoComplete="new-password"
+                  className={clsx({
+                    "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                      true,
+                    "ring-red-400": errors.password,
+                  })}
                 />
               </div>
+              {errors.password && (
+                <p className="mt-1 ml-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center justify-between">
@@ -92,21 +125,21 @@ export default function Signup() {
               </div>
               <div className="mt-2">
                 <input
-                  {...register("confirmPassword", {
-                    required: true,
-                    validate: (val: string) => {
-                      if (watch("password") != val) {
-                        return "Your passwords do no match";
-                      }
-                    },
-                  })}
-                  id="confirmPassword"
-                  name="confirmPassword"
+                  {...register("confirmPassword")}
                   type="password"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className={clsx({
+                    "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                      true,
+                    "ring-red-400": errors.confirmPassword,
+                  })}
                 />
+                {errors.confirmPassword && (
+                  <p className="mt-1 ml-1 text-sm text-red-600">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
             </div>
 
