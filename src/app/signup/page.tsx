@@ -161,6 +161,7 @@ export default function Signup() {
           </p>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }
