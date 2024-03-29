@@ -178,7 +178,7 @@ export const useRouteStore = create<RouteState>()(
       },
       editRoute: async () => {
         set((state) => {
-          return { ...state, isLoading: true };
+          return { ...state, isLoading: true, isMapBusy: true };
         });
         const routeState = get();
         const res = await fetch(`/routes/${routeState.id}`, {
@@ -199,6 +199,7 @@ export const useRouteStore = create<RouteState>()(
           ...state,
           isLoading: false,
           isModified: false,
+          isMapBusy: false,
         }));
       },
       loadRoute: (route: Route) => {
@@ -227,6 +228,7 @@ export const useRouteStore = create<RouteState>()(
         isModified: state.isModified,
         isLoading: state.isLoading,
         error: state.error,
+        selectedRouteId: state.selectedRouteId,
       }),
     }
   )
