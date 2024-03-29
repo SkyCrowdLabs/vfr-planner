@@ -1,18 +1,20 @@
 import { useRouteStore } from "@/store/store";
 import { GeocodingResponse, Waypoint } from "@/types";
 import { fetcher } from "@/utils/fetcher";
-import { LatLng, LeafletMouseEvent } from "leaflet";
+import { LatLng, LeafletMouseEvent, latLngBounds } from "leaflet";
 import randomColor from "randomcolor";
 import React, { useEffect, useMemo, useState } from "react";
-import { Polyline } from "react-leaflet";
+import { Polyline, useMap } from "react-leaflet";
 import useSWR from "swr";
 
 interface EnrouteProps {}
 
 const Enroute: React.FC<EnrouteProps> = () => {
+  const map = useMap();
   const [latlng, setLatlng] = useState<LatLng | undefined>(undefined);
   const [fromLatlng, setFromLatlng] = useState<LatLng | undefined>(undefined);
   const waypoints = useRouteStore((state) => state.waypoints);
+  const id = useRouteStore((state) => state.id);
   const linePositions = waypoints.reduce((acc, { latlng }, i) => {
     if (i === 0) return acc;
     return [...acc, [latlng, waypoints[i - 1].latlng]];
@@ -23,6 +25,17 @@ const Enroute: React.FC<EnrouteProps> = () => {
     latlng ? `/geocoding?lat=${latlng.lat}&lng=${latlng.lng}` : null,
     fetcher
   );
+
+  useEffect(() => {
+    if (waypoints.length > 0) {
+      const bounds = latLngBounds([
+        waypoints[0].latlng,
+        waypoints[waypoints.length - 1].latlng,
+      ]);
+      map.fitBounds(bounds);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     if (latlng && fromLatlng && data) {
