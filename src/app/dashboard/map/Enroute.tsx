@@ -28,10 +28,7 @@ const Enroute: React.FC<EnrouteProps> = () => {
 
   useEffect(() => {
     if (waypoints.length > 0) {
-      const bounds = latLngBounds([
-        waypoints[0].latlng,
-        waypoints[waypoints.length - 1].latlng,
-      ]);
+      const bounds = latLngBounds(waypoints.map(({ latlng }) => latlng));
       map.fitBounds(bounds);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
