@@ -4,19 +4,36 @@ import { login } from "./actions";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import clsx from "clsx";
+import toast, { Toaster } from "react-hot-toast";
 
 export interface LoginInput {
   email: string;
   password: string;
 }
 
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email("Must be a valid email")
+      .required("Email is required"),
+    password: yup.string().required("Password is required"),
+  })
+  .required();
+
 export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<LoginInput>();
-  const onSubmit: SubmitHandler<LoginInput> = (data) => login(data);
+    formState: { isSubmitting, errors },
+  } = useForm<LoginInput>({ mode: "onBlur", resolver: yupResolver(schema) });
+  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
+    const error = await login(data);
+    if (error) toast.error(error);
+  };
 
   return (
     <>
@@ -47,15 +64,20 @@ export default function Login() {
               </label>
               <div className="mt-2">
                 <input
-                  {...register("email")}
-                  id="email"
-                  name="email"
-                  type="email"
                   autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  {...register("email")}
+                  className={clsx({
+                    "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                      true,
+                    "ring-red-400": errors.email,
+                  })}
                 />
               </div>
+              {errors.email && (
+                <p className="mt-1 ml-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -66,25 +88,31 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <div className="text-sm">
+                {/* <div className="text-sm">
                   <a
                     href="#"
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mt-2">
                 <input
-                  {...register("password")}
-                  id="password"
-                  name="password"
                   type="password"
                   autoComplete="current-password"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  {...register("password")}
+                  className={clsx({
+                    "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6":
+                      true,
+                    "ring-red-400": errors.password,
+                  })}
                 />
+                {errors.password && (
+                  <p className="mt-1 ml-1 text-sm text-red-600">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -106,6 +134,7 @@ export default function Login() {
           </p>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }
