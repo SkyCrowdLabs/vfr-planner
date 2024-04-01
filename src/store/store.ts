@@ -17,6 +17,7 @@ interface RouteState extends Route {
     destination: Airport
   ) => void;
   addWaypoint: (waypoint: Waypoint, i: number) => void;
+  renameWaypoint: (id: string, name: string) => void;
   editWaypoint: (id: string, waypoint: Waypoint) => void;
   removeWaypoint: (id: string) => void;
   saveRoute: () => Promise<void>;
@@ -137,6 +138,14 @@ export const useRouteStore = create<RouteState>()(
           const editedWaypoints = [...state.waypoints];
           editedWaypoints[i] = currentNewWaypoint;
           editedWaypoints[i + 1] = updatedNextWaypoint;
+          return { ...state, waypoints: editedWaypoints, isModified: true };
+        });
+      },
+      renameWaypoint: (id, name) => {
+        set((state) => {
+          const i = state.waypoints.findIndex((w) => w.id === id);
+          const editedWaypoints = [...state.waypoints];
+          editedWaypoints[i].name = name;
           return { ...state, waypoints: editedWaypoints, isModified: true };
         });
       },
