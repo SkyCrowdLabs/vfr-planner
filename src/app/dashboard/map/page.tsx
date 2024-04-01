@@ -89,7 +89,7 @@ const RouteBuilder: NextPage = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row">
+    <div className="w-full h-[calc(80%*100vh)] md:h-full flex flex-col md:flex-row">
       <div
         className={clsx(
           {
