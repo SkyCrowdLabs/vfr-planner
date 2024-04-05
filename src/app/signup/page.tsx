@@ -57,7 +57,7 @@ export default function Signup() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Link href="/">
             <Image
-              src="/favicon-32x32.png"
+              src="/images/favicon-32x32.png"
               alt="airplane emoji"
               className="w-10 h-auto mx-auto"
               width={40}

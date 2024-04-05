@@ -114,7 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                   <div className="flex h-16 shrink-0 items-center">
                     <Link href={"/"}>
                       <Image
-                        src="/favicon-32x32.png"
+                        src="/images/favicon-32x32.png"
                         alt="airplane emoji"
                         className="w-8 h-auto"
                         width={32}
@@ -169,7 +169,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
           <div className="flex h-16 shrink-0 items-center">
             <Link href="/">
               <Image
-                src="/favicon-32x32.png"
+                src="/images/favicon-32x32.png"
                 alt="airplane emoji"
                 className="w-8 h-auto"
                 width={32}

@@ -16,7 +16,7 @@ const LandingNavigation = () => {
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">VFR Planner</span>
             <Image
-              src="/favicon-32x32.png"
+              src="/images/favicon-32x32.png"
               alt="airplane emoji"
               className="w-8 h-auto"
               width={32}
@@ -55,7 +55,7 @@ const LandingNavigation = () => {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">VFR Planner</span>
               <Image
-                src="/favicon-32x32.png"
+                src="/images/favicon-32x32.png"
                 alt="airplane emoji"
                 className="w-8 h-auto"
                 width={32}
